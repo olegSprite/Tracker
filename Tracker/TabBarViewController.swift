@@ -13,6 +13,9 @@ final class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createTabBar()
+        if #available(iOS 15.0, *) {
+            UITabBar.appearance().scrollEdgeAppearance = UITabBarAppearance()
+        }
     }
     
     private func createTabBar() {

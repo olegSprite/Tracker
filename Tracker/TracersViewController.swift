@@ -11,7 +11,16 @@ final class TracersViewController: UIViewController {
     
     private let plugImageView = UIImageView()
     private let plugLable = UILabel()
-
+    private var tracersCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
+    
+    var tracers: [Tracker] = [Tracker(id: UUID.init(), name: "Это надпись для трекера", color: .red, emojy: "", timetable: .friday)]
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -20,8 +29,7 @@ final class TracersViewController: UIViewController {
     
     private func setupViews() {
         setupNavBar()
-        addPlugImage()
-        addPlugLable()
+        showPlugOrTracers()
     }
     
     private func setupNavBar() {
@@ -31,6 +39,42 @@ final class TracersViewController: UIViewController {
         let leftButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: nil, action: nil)
         leftButton.tintColor = .black
         self.navigationItem.leftBarButtonItem = leftButton
+        
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        
+        let searchField = UISearchController(searchResultsController: nil)
+        searchField.automaticallyShowsCancelButton = true
+        self.navigationItem.searchController = searchField
+    }
+    
+    private func showPlugOrTracers() {
+        if tracers.isEmpty {
+            addPlugImage()
+            addPlugLable()
+        } else {
+            addTrecersCollectionView()
+            setupTrecersCollectionView()
+        }
+    }
+    
+    private func addTrecersCollectionView() {
+        tracersCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tracersCollectionView)
+        NSLayoutConstraint.activate([
+            tracersCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tracersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tracersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tracersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    
+    private func setupTrecersCollectionView() {
+        self.tracersCollectionView.dataSource = self
+        tracersCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        tracersCollectionView.register(TracerViewCell.self, forCellWithReuseIdentifier: "cell")
     }
     
     private func addPlugImage() {
@@ -54,6 +98,14 @@ final class TracersViewController: UIViewController {
             plugLable.topAnchor.constraint(equalTo: plugImageView.bottomAnchor, constant: 8),
             plugLable.centerXAnchor.constraint(equalTo: plugImageView.centerXAnchor)
         ])
+    }
+    
+    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+        let selectedDate = sender.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy" // Формат даты
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        print("Выбранная дата: \(formattedDate)")
     }
 }
 

@@ -17,8 +17,29 @@ final class TracersViewController: UIViewController {
         return collectionView
     }()
     
-    var tracers: [Tracker] = [Tracker(id: UUID.init(), name: "Это надпись для трекера", color: .red, emojy: "", timetable: .friday)]
-    private var categories: [TrackerCategory] = []
+    var categories: [TrackerCategory] = [
+        TrackerCategory(
+            heading: "Животные",
+            tracers: [
+                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .friday),
+                Tracker(id: UUID.init(), name: "Заняться спортом", color: .green, emojy: "❤️", timetable: .friday),
+                Tracker(id: UUID.init(), name: "Выучить Swift", color: .blue, emojy: "😎", timetable: .friday)
+            ]),
+        TrackerCategory(
+            heading: "Крокодилы",
+            tracers: [
+                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .friday),
+                Tracker(id: UUID.init(), name: "Заняться спортом", color: .brown, emojy: "❤️", timetable: .friday),
+                Tracker(id: UUID.init(), name: "Выучить Swift", color: .blue, emojy: "😎", timetable: .friday)
+                ]),
+        TrackerCategory(
+            heading: "И так далее",
+            tracers: [
+                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .friday),
+                Tracker(id: UUID.init(), name: "Заняться спортом", color: .green, emojy: "❤️", timetable: .friday),
+                Tracker(id: UUID.init(), name: "Выучить Swift", color: .gray, emojy: "😎", timetable: .friday)
+                ])
+    ]
     private var completedTrackers: [TrackerRecord] = []
     
     override func viewDidLoad() {
@@ -51,7 +72,7 @@ final class TracersViewController: UIViewController {
     }
     
     private func showPlugOrTracers() {
-        if tracers.isEmpty {
+        if categories.isEmpty {
             addPlugImage()
             addPlugLable()
         } else {
@@ -66,15 +87,17 @@ final class TracersViewController: UIViewController {
         NSLayoutConstraint.activate([
             tracersCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tracersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tracersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tracersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            tracersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tracersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 16)
         ])
     }
     
     private func setupTrecersCollectionView() {
         self.tracersCollectionView.dataSource = self
+        self.tracersCollectionView.delegate = self
         tracersCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         tracersCollectionView.register(TracerViewCell.self, forCellWithReuseIdentifier: "cell")
+        tracersCollectionView.register(HeaderViewController.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
     }
     
     private func addPlugImage() {

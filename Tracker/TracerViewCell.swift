@@ -10,27 +10,103 @@ import UIKit
 
 final class TracerViewCell: UICollectionViewCell {
     
-    let nameLable = UILabel()
-    private let emogiImage = UIImageView()
+    private let nameLable = UILabel()
+    private let emogiImage = UILabel()
     private let daysCountLable = UILabel()
     private let completeButton = UIButton()
+    private var background = UIView()
+    
+    private var daysCount: Int = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupViews() {
-        contentView.addSubview(nameLable)
-        nameLable.translatesAutoresizingMaskIntoConstraints = false
-       NSLayoutConstraint.activate([
-        nameLable.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            nameLable.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+    func setupViews(tracker: Tracker) {
+        createBackground(color: tracker.color)
+        addName(name: tracker.name)
+        addEmoji(emoji: tracker.emojy)
+        addCompleteButton(color: tracker.color)
+        addDaysCountLable()
+    }
+    
+    private func createBackground(color: UIColor) {
+        background.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(background)
+        background.backgroundColor = color
+        NSLayoutConstraint.activate([
+            background.widthAnchor.constraint(equalToConstant: 167),
+            background.heightAnchor.constraint(equalToConstant: 90),
         ])
+        background.layer.cornerRadius = 16
+    }
+    
+    private func addName(name: String) {
+        nameLable.translatesAutoresizingMaskIntoConstraints = false
+        nameLable.text = name
+        nameLable.font = UIFont.systemFont(ofSize: 12)
+        nameLable.textColor = .white
+        nameLable.lineBreakMode = .byWordWrapping
+        addSubview(nameLable)
+        NSLayoutConstraint.activate([
+            nameLable.leadingAnchor.constraint(equalTo: background.leadingAnchor, constant: 12),
+            nameLable.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -12),
+            nameLable.bottomAnchor.constraint(equalTo: background.bottomAnchor, constant: -12),
+            nameLable.heightAnchor.constraint(equalToConstant: 34)
+        ])
+    }
+    
+    private func addEmoji(emoji: String) {
+        emogiImage.translatesAutoresizingMaskIntoConstraints = false
+        emogiImage.text = emoji
+        emogiImage.font = UIFont.systemFont(ofSize: 16)
+        emogiImage.textAlignment = .center
+        emogiImage.backgroundColor = .white.withAlphaComponent(0.3)
+        emogiImage.layer.masksToBounds = true
+        emogiImage.layer.cornerRadius = 12
+        addSubview(emogiImage)
+        NSLayoutConstraint.activate([
+            emogiImage.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
+            emogiImage.heightAnchor.constraint(equalToConstant: 24),
+            emogiImage.widthAnchor.constraint(equalToConstant: 24),
+            emogiImage.topAnchor.constraint(equalTo: background.topAnchor, constant: 12)
+        ])
+    }
+    
+    private func addDaysCountLable() {
+        daysCountLable.translatesAutoresizingMaskIntoConstraints = false
+        daysCountLable.text = "\(daysCount) дней"
+        daysCountLable.font = UIFont.systemFont(ofSize: 12)
+        addSubview(daysCountLable)
+        NSLayoutConstraint.activate([
+            daysCountLable.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
+            daysCountLable.centerYAnchor.constraint(equalTo: completeButton.centerYAnchor),
+            
+        ])
+    }
+    
+    private func addCompleteButton(color: UIColor) {
+        completeButton.translatesAutoresizingMaskIntoConstraints = false
+        completeButton.backgroundColor = color
+        completeButton.layer.cornerRadius = 16
+        completeButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        completeButton.tintColor = .white
+        completeButton.addTarget(self, action: #selector(didTapCompleteButton), for: .touchUpInside)
+        addSubview(completeButton)
+        NSLayoutConstraint.activate([
+            completeButton.topAnchor.constraint(equalTo: background.bottomAnchor, constant: 8),
+            completeButton.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -12),
+            completeButton.widthAnchor.constraint(equalToConstant: 34),
+            completeButton.heightAnchor.constraint(equalToConstant: 34)
+        ])
+    }
+    
+    @objc private func didTapCompleteButton() {
+        print("Кнопка нажата")
     }
 }
 

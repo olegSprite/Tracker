@@ -14,14 +14,15 @@ struct Tracker {
     let color: UIColor
     let emojy: String
     let timetable: Timetable
-    
-    enum Timetable {
-        case monday
-        case tuesday
-        case wednesday
-        case thursday
-        case friday
-        case saturday
-        case sunday
-    }
+}
+
+enum Timetable: Equatable {
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    case sunday
+    case none
 }

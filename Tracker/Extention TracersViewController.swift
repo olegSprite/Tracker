@@ -11,22 +11,22 @@ import UIKit
 extension TracersViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        categories.count
+        curentCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categories[section].tracers.count
+        return curentCategories[section].tracers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TracerViewCell else { return UICollectionViewCell() }
-        cell.setupViews(tracker: categories[indexPath.section].tracers[indexPath.row])
+        cell.setupViews(tracker: curentCategories[indexPath.section].tracers[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! HeaderViewController
-        view.titleLabel.text = categories[indexPath.section].heading
+        view.titleLabel.text = curentCategories[indexPath.section].heading
         return view
     }
 }

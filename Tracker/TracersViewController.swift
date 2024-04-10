@@ -17,35 +17,39 @@ final class TracersViewController: UIViewController {
         return collectionView
     }()
     
-    var categories: [TrackerCategory] = [
+    private var categories: [TrackerCategory] = [
         TrackerCategory(
             heading: "Животные",
             tracers: [
                 Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .friday),
-                Tracker(id: UUID.init(), name: "Заняться спортом", color: .green, emojy: "❤️", timetable: .friday),
-                Tracker(id: UUID.init(), name: "Выучить Swift", color: .blue, emojy: "😎", timetable: .friday)
+                Tracker(id: UUID.init(), name: "Заняться спортом", color: .green, emojy: "❤️", timetable: .monday),
+                Tracker(id: UUID.init(), name: "Выучить Swift", color: .blue, emojy: "😎", timetable: .sunday)
             ]),
         TrackerCategory(
             heading: "Крокодилы",
             tracers: [
-                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .friday),
-                Tracker(id: UUID.init(), name: "Заняться спортом", color: .brown, emojy: "❤️", timetable: .friday),
-                Tracker(id: UUID.init(), name: "Выучить Swift", color: .blue, emojy: "😎", timetable: .friday)
+                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .monday),
+                Tracker(id: UUID.init(), name: "Заняться спортом", color: .brown, emojy: "❤️", timetable: .wednesday),
+                Tracker(id: UUID.init(), name: "Выучить Swift", color: .blue, emojy: "😎", timetable: .saturday)
                 ]),
         TrackerCategory(
             heading: "И так далее",
             tracers: [
                 Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .friday),
-                Tracker(id: UUID.init(), name: "Заняться спортом", color: .green, emojy: "❤️", timetable: .friday),
-                Tracker(id: UUID.init(), name: "Выучить Swift", color: .gray, emojy: "😎", timetable: .friday)
+                Tracker(id: UUID.init(), name: "Заняться спортом", color: .green, emojy: "❤️", timetable: .wednesday),
+                Tracker(id: UUID.init(), name: "Выучить Swift", color: .gray, emojy: "😎", timetable: .sunday)
                 ])
     ]
+    var curentCategories = [TrackerCategory]()
     private var completedTrackers: [TrackerRecord] = []
+    private var curentDayOfWeak: Timetable = .none
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupViews()
+        curentDayOfWeak = calculateDayOfWeak(date: Date())
+        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
     }
     
     private func setupViews() {
@@ -56,8 +60,7 @@ final class TracersViewController: UIViewController {
     private func setupNavBar() {
         title = "Трекеры"
         navigationController?.navigationBar.prefersLargeTitles = true
-        
-        let leftButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: nil, action: nil)
+        let leftButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(didTapPlusButtonOnNavBar))
         leftButton.tintColor = .black
         self.navigationItem.leftBarButtonItem = leftButton
         
@@ -123,12 +126,59 @@ final class TracersViewController: UIViewController {
         ])
     }
     
+    private func calculateDayOfWeak(date: Date) -> Timetable {
+        let selectedDate = date
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: selectedDate)
+        switch weekday {
+        case 1:
+            return .sunday
+        case 2:
+            return .monday
+        case 3:
+            return .tuesday
+        case 4:
+            return .wednesday
+        case 5:
+            return .thursday
+        case 6:
+            return .friday
+        case 7:
+            return .saturday
+        default:
+            print("Ошибка получения дня недели")
+            return .none
+        }
+    }
+    
+    func calculateArrayOfWeak(weak: Timetable, categories: [TrackerCategory]) -> [TrackerCategory] {
+        var resultArray = [TrackerCategory]()
+        for category in categories {
+            var resultTracersInCategory = [Tracker]()
+            for tracer in category.tracers {
+                if tracer.timetable == weak {
+                    resultTracersInCategory.append(tracer)
+                }
+            }
+            if !resultTracersInCategory.isEmpty {
+                let resultOfCategory = TrackerCategory(heading: category.heading, tracers: resultTracersInCategory)
+                resultArray.append(resultOfCategory)
+            }
+        }
+        return resultArray
+    }
+    
     @objc func datePickerValueChanged(_ sender: UIDatePicker) {
-        let selectedDate = sender.date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy" // Формат даты
-        let formattedDate = dateFormatter.string(from: selectedDate)
-        print("Выбранная дата: \(formattedDate)")
+        curentDayOfWeak = calculateDayOfWeak(date: sender.date)
+        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
+        tracersCollectionView.reloadData()
+    }
+    
+    @objc func didTapPlusButtonOnNavBar() {
+        let vc = HabitOrEventViewController()
+//        self.present(vc, animated: true)
+
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 

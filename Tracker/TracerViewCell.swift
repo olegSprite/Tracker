@@ -105,8 +105,28 @@ final class TracerViewCell: UICollectionViewCell {
         ])
     }
     
+    private func chengeDaysCount() {
+        let newCount = daysCount + 1
+        switch newCount{
+        case 1: 
+            daysCountLable.text = "\(newCount) день"
+        case 2...4:
+            daysCountLable.text = "\(newCount) дня"
+        default:
+            daysCountLable.text = "\(newCount) дней"
+        }
+        daysCount = newCount
+        tracerCompleteToday()
+    }
+    
+    private func tracerCompleteToday() {
+        completeButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        completeButton.backgroundColor = completeButton.backgroundColor?.withAlphaComponent(0.3)
+        completeButton.isEnabled = false
+    }
+    
     @objc private func didTapCompleteButton() {
-        print("Кнопка нажата")
+        chengeDaysCount()
     }
 }
 

@@ -12,12 +12,12 @@ final class HabitOrEventViewController: UIViewController {
     
     private let habitButton = UIButton()
     private let tracerButton = UIButton()
-    private let titileLable = UILabel()
+    var originalNavigationVC: UINavigationController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavBar()
         setupViews()
-        title = "Создание трекера"
     }
     
     private func setupViews() {
@@ -26,9 +26,9 @@ final class HabitOrEventViewController: UIViewController {
         addTracerButton()
     }
     
-    private func addTitle() {
-        titileLable.text = "Создание трекера"
-        // тут заголовок
+    private func setupNavBar() {
+        title = "Создание трекера"
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     private func createButton(button: UIButton, title: String, selector: Selector) {
@@ -67,7 +67,9 @@ final class HabitOrEventViewController: UIViewController {
     private func goToNextVC(isTracer: Bool) {
         let vc = CreateTracerViewController()
         vc.isTracer = isTracer
-        self.navigationController?.pushViewController(vc, animated: true)
+        let navBar = UINavigationController(rootViewController: vc)
+        navBar.modalPresentationStyle = .popover
+        self.present(navBar, animated: true)
     }
     
     

@@ -12,8 +12,12 @@ final class CattegoriesItCreactingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .white
+        setupNavBar()
+    }
+    
+    private func setupNavBar() {
         title = "Категория"
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }

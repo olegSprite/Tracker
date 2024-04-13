@@ -13,7 +13,7 @@ struct Tracker {
     let name: String
     let color: UIColor
     let emojy: String
-    let timetable: Timetable
+    let timetable: [Timetable]
 }
 
 enum Timetable: Equatable {

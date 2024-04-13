@@ -16,7 +16,12 @@ final class TracerViewCell: UICollectionViewCell {
     private let completeButton = UIButton()
     private var background = UIView()
     
-    private var daysCount: Int = 0
+    var daysCount: Int = 0
+    var tracerChengeToday = false
+    private let currentDate = Date()
+    var selectedDate = Date()
+    private var currentTracer: Tracker?
+    var tracerViewController: TracersViewController?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,6 +37,7 @@ final class TracerViewCell: UICollectionViewCell {
         addEmoji(emoji: tracker.emojy)
         addCompleteButton(color: tracker.color)
         addDaysCountLable()
+        currentTracer = tracker
     }
     
     private func createBackground(color: UIColor) {
@@ -79,7 +85,7 @@ final class TracerViewCell: UICollectionViewCell {
     
     private func addDaysCountLable() {
         daysCountLable.translatesAutoresizingMaskIntoConstraints = false
-        daysCountLable.text = "\(daysCount) дней"
+        setupDaysCount(newCount: daysCount)
         daysCountLable.font = UIFont.systemFont(ofSize: 12)
         addSubview(daysCountLable)
         NSLayoutConstraint.activate([
@@ -93,7 +99,11 @@ final class TracerViewCell: UICollectionViewCell {
         completeButton.translatesAutoresizingMaskIntoConstraints = false
         completeButton.backgroundColor = color
         completeButton.layer.cornerRadius = 16
-        completeButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        if tracerChengeToday == false {
+            tracerNoCompleteToday()
+        } else {
+            tracerCompleteToday()
+        }
         completeButton.tintColor = .white
         completeButton.addTarget(self, action: #selector(didTapCompleteButton), for: .touchUpInside)
         addSubview(completeButton)
@@ -105,28 +115,62 @@ final class TracerViewCell: UICollectionViewCell {
         ])
     }
     
-    private func chengeDaysCount() {
-        let newCount = daysCount + 1
+    private func setupDaysCount(newCount: Int) {
         switch newCount{
-        case 1: 
+        case 1:
             daysCountLable.text = "\(newCount) день"
         case 2...4:
             daysCountLable.text = "\(newCount) дня"
         default:
             daysCountLable.text = "\(newCount) дней"
         }
+    }
+    
+    private func plusDaysCount() {
+        let newCount = daysCount + 1
+        tracerChengeToday = true
+        setupDaysCount(newCount: newCount)
         daysCount = newCount
         tracerCompleteToday()
+    }
+    
+    private func minesDaysCount() {
+        let newCount = daysCount - 1
+        tracerChengeToday = false
+        setupDaysCount(newCount: newCount)
+        daysCount = newCount
+        tracerNoCompleteToday()
     }
     
     private func tracerCompleteToday() {
         completeButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
         completeButton.backgroundColor = completeButton.backgroundColor?.withAlphaComponent(0.3)
-        completeButton.isEnabled = false
+    }
+    
+    private func tracerNoCompleteToday() {
+        completeButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        completeButton.backgroundColor = completeButton.backgroundColor?.withAlphaComponent(1)
+    }
+    
+    private func writeCompletedTracker() {
+        guard let tracer = currentTracer else { return }
+        let result = TrackerRecord(id: tracer.id, date: self.selectedDate)
+        var oldCompletedTrackers = tracerViewController?.completedTrackers
+        var newCompletedTrackers: [TrackerRecord] = []
+        oldCompletedTrackers?.append(result)
+        guard let old = oldCompletedTrackers else { return }
+        newCompletedTrackers = old
+        tracerViewController?.completedTrackers = newCompletedTrackers
     }
     
     @objc private func didTapCompleteButton() {
-        chengeDaysCount()
+        guard currentDate > selectedDate else { return }
+        if tracerChengeToday == false {
+            plusDaysCount()
+            writeCompletedTracker()
+        } else {
+            minesDaysCount()
+        }
     }
 }
 

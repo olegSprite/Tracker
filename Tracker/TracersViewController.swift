@@ -21,28 +21,13 @@ final class TracersViewController: UIViewController {
         TrackerCategory(
             heading: "Животные",
             tracers: [
-                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .friday),
-                Tracker(id: UUID.init(), name: "Заняться спортом", color: .green, emojy: "❤️", timetable: .monday),
-                Tracker(id: UUID.init(), name: "Выучить Swift", color: .blue, emojy: "😎", timetable: .sunday)
-            ]),
-        TrackerCategory(
-            heading: "Крокодилы",
-            tracers: [
-                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .monday),
-                Tracker(id: UUID.init(), name: "Заняться спортом", color: .brown, emojy: "❤️", timetable: .wednesday),
-                Tracker(id: UUID.init(), name: "Выучить Swift", color: .blue, emojy: "😎", timetable: .saturday)
-                ]),
-        TrackerCategory(
-            heading: "И так далее",
-            tracers: [
-                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: .friday),
-                Tracker(id: UUID.init(), name: "Заняться спортом", color: .green, emojy: "❤️", timetable: .wednesday),
-                Tracker(id: UUID.init(), name: "Выучить Swift", color: .gray, emojy: "😎", timetable: .sunday)
-                ])
+                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: [.friday]),
+            ])
     ]
     var curentCategories = [TrackerCategory]()
-    private var completedTrackers: [TrackerRecord] = []
+    var completedTrackers: [TrackerRecord] = []
     private var curentDayOfWeak: Timetable = .none
+    var currentDate: Date = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +50,7 @@ final class TracersViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = leftButton
         
         let datePicker = UIDatePicker()
+        datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
@@ -75,7 +61,7 @@ final class TracersViewController: UIViewController {
     }
     
     private func showPlugOrTracers() {
-        if categories.isEmpty {
+        if curentCategories.isEmpty {
             addPlugImage()
             addPlugLable()
         } else {
@@ -156,8 +142,10 @@ final class TracersViewController: UIViewController {
         for category in categories {
             var resultTracersInCategory = [Tracker]()
             for tracer in category.tracers {
-                if tracer.timetable == weak {
-                    resultTracersInCategory.append(tracer)
+                for i in tracer.timetable {
+                    if i == weak {
+                        resultTracersInCategory.append(tracer)
+                    }
                 }
             }
             if !resultTracersInCategory.isEmpty {
@@ -168,17 +156,37 @@ final class TracersViewController: UIViewController {
         return resultArray
     }
     
+    func calculateCountOfDayOnDate(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Int {
+        var result: Int = 0
+        for i in completedTrackers {
+            if i.id == tracer.id && i.date < date {
+                result += 1
+            }
+        }
+        return result
+    }
+    
+    func completeTracerOnDateOrNot(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Bool {
+        var result = false
+        for i in completedTrackers {
+            if i.id == tracer.id && i.date == date {
+                result = true
+            }
+        }
+        return result
+    }
+    
     @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+        currentDate = sender.date
         curentDayOfWeak = calculateDayOfWeak(date: sender.date)
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
+        showPlugOrTracers()
         tracersCollectionView.reloadData()
     }
     
     @objc func didTapPlusButtonOnNavBar() {
-        let vc = HabitOrEventViewController()
-//        self.present(vc, animated: true)
-
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = UINavigationController(rootViewController: HabitOrEventViewController())
+        self.present(vc, animated: true)
     }
 }
 

@@ -14,16 +14,20 @@ final class CreateTracerViewController: UIViewController {
     private let contentView = UIView()
     private let nameTracerTextField = UITextField()
     private let buttonsOfCattegoryOrTimetableTableView = UITableView()
+    private let exitButton = UIButton()
+    private let saveButton = UIButton()
     
     var isTracer = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
-        title = isTracer ? "Новая привычка" : "Новое нерегулярное событие"
-        
+        setupNavBar()
         addViews()
+    }
+    
+    private func setupNavBar() {
+        title = isTracer ? "Новая привычка" : "Новое нерегулярное событие"
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     private func addViews() {
@@ -31,6 +35,8 @@ final class CreateTracerViewController: UIViewController {
         addScrollView()
         addNameTracerTextField()
         addButtonsOfCattegoryOrTimetableTableView()
+        addExitButton()
+        addSaveButton()
     }
     
     private func addScrollView() {
@@ -71,6 +77,53 @@ final class CreateTracerViewController: UIViewController {
             buttonsOfCattegoryOrTimetableTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             buttonsOfCattegoryOrTimetableTableView.heightAnchor.constraint(equalToConstant: isTracer ? 150 : 75)
         ])
+    }
+    
+    private func addExitButton() {
+        exitButton.setTitle("Отменить", for: .normal)
+        exitButton.setTitleColor(UIColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1), for: .normal)
+        exitButton.addTarget(self, action: #selector(tapExitButton), for: .touchUpInside)
+        exitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        exitButton.layer.masksToBounds = true
+        exitButton.layer.borderWidth = 1
+        exitButton.layer.borderColor = CGColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1)
+        exitButton.layer.cornerRadius = 16
+        exitButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(exitButton)
+        NSLayoutConstraint.activate([
+            exitButton.heightAnchor.constraint(equalToConstant: 60),
+            exitButton.widthAnchor.constraint(equalToConstant: 166),
+            exitButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -4),
+            exitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34)
+        ])
+    }
+    
+    private func addSaveButton() {
+        saveButton.setTitle("Создать", for: .normal)
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
+        saveButton.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)
+        saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        saveButton.layer.masksToBounds = true
+        saveButton.layer.cornerRadius = 16
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(saveButton)
+        NSLayoutConstraint.activate([
+            saveButton.heightAnchor.constraint(equalToConstant: 60),
+            saveButton.widthAnchor.constraint(equalToConstant: 166),
+            saveButton.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: 4),
+            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34)
+        ])
+    }
+    
+    @objc private func tapExitButton() {
+        // Нужна реализация нормального навигейшина, чтобы не дрочиться с костылями
+        self.dismiss(animated: true)
+        self.navigationController?.presentedViewController?.dismiss(animated: true)
+    }
+    
+    @objc private func tapSaveButton() {
+        
     }
 }
 

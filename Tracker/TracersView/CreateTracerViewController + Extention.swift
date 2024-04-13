@@ -13,11 +13,11 @@ extension CreateTracerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
      
         if indexPath.row == 0 {
-            let vc = CattegoriesItCreactingViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            let vc = UINavigationController(rootViewController: CattegoriesItCreactingViewController())
+            self.present(vc, animated: true)
         } else {
-            let vc = TimetableViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            let vc = UINavigationController(rootViewController: TimetableViewController())
+            self.present(vc, animated: true)
         }
      }
 }

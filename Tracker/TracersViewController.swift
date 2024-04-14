@@ -22,6 +22,8 @@ final class TracersViewController: UIViewController {
             heading: "Животные",
             tracers: [
                 Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: [.friday]),
+                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .green, emojy: "🤣", timetable: [.friday]),
+                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .black, emojy: "🤣", timetable: [.friday])
             ])
     ]
     var curentCategories = [TrackerCategory]()
@@ -159,7 +161,7 @@ final class TracersViewController: UIViewController {
     func calculateCountOfDayOnDate(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Int {
         var result: Int = 0
         for i in completedTrackers {
-            if i.id == tracer.id && i.date < date {
+            if i.id == tracer.id && i.date <= date {
                 result += 1
             }
         }

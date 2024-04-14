@@ -20,11 +20,13 @@ extension TracersViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TracerViewCell else { return UICollectionViewCell() }
-        cell.setupViews(tracker: curentCategories[indexPath.section].tracers[indexPath.row])
+        let tracer = curentCategories[indexPath.section].tracers[indexPath.row]
         cell.selectedDate = currentDate
         cell.tracerViewController = self
-        cell.daysCount = calculateCountOfDayOnDate(tracer: curentCategories[indexPath.section].tracers[indexPath.row], completedTrackers: completedTrackers, date: currentDate)
-        cell.tracerChengeToday = completeTracerOnDateOrNot(tracer: curentCategories[indexPath.section].tracers[indexPath.row], completedTrackers: completedTrackers, date: currentDate)
+        cell.daysCount = calculateCountOfDayOnDate(tracer: tracer, completedTrackers: completedTrackers, date: currentDate)
+        cell.tracerChengeToday = completeTracerOnDateOrNot(tracer: tracer, completedTrackers: completedTrackers, date: currentDate)
+        cell.currentTracer(tracer: tracer)
+        cell.setupViews(tracker: tracer)
         return cell
     }
     

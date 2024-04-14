@@ -23,13 +23,7 @@ final class TracerViewCell: UICollectionViewCell {
     private var currentTracer: Tracker?
     var tracerViewController: TracersViewController?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - Functions
     
     func setupViews(tracker: Tracker) {
         createBackground(color: tracker.color)
@@ -37,8 +31,13 @@ final class TracerViewCell: UICollectionViewCell {
         addEmoji(emoji: tracker.emojy)
         addCompleteButton(color: tracker.color)
         addDaysCountLable()
-        currentTracer = tracker
     }
+    
+    func currentTracer(tracer: Tracker) {
+        currentTracer = tracer
+    }
+    
+    // MARK: - Private Functions
     
     private func createBackground(color: UIColor) {
         background.translatesAutoresizingMaskIntoConstraints = false
@@ -163,6 +162,23 @@ final class TracerViewCell: UICollectionViewCell {
         tracerViewController?.completedTrackers = newCompletedTrackers
     }
     
+    private func deleteCompletedTracer() {
+        guard let tracer = currentTracer else { return }
+        let recordTracer = TrackerRecord(id: tracer.id, date: selectedDate)
+        let oldCompletedTrackers = tracerViewController?.completedTrackers
+        var newCompletedTrackers: [TrackerRecord] = []
+        guard let old = oldCompletedTrackers else { return }
+        for i in old {
+            if i.id != recordTracer.id {
+                newCompletedTrackers.append(i)
+            }
+            if i.id == recordTracer.id && i.date != recordTracer.date {
+                newCompletedTrackers.append(i)
+            }
+        }
+        tracerViewController?.completedTrackers = newCompletedTrackers
+    }
+    
     @objc private func didTapCompleteButton() {
         guard currentDate > selectedDate else { return }
         if tracerChengeToday == false {
@@ -170,6 +186,7 @@ final class TracerViewCell: UICollectionViewCell {
             writeCompletedTracker()
         } else {
             minesDaysCount()
+            deleteCompletedTracer()
         }
     }
 }

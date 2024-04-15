@@ -44,6 +44,7 @@ final class TimetableViewController: UIViewController {
     
     private func setupTableView() {
         timetableTableView.dataSource = self
+        timetableTableView.delegate = self
         timetableTableView.layer.masksToBounds = true
         timetableTableView.layer.cornerRadius = 16
         view.addSubview(timetableTableView)

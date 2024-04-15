@@ -163,7 +163,7 @@ final class TracersViewController: UIViewController, CreateTracerViewControllerD
     func calculateCountOfDayOnDate(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Int {
         var result: Int = 0
         for i in completedTrackers {
-            if i.id == tracer.id && i.date <= date {
+            if i.id == tracer.id {
                 result += 1
             }
         }

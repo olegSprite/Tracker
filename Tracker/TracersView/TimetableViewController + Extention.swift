@@ -31,3 +31,9 @@ extension TimetableViewController: UITableViewDataSource {
         return 75
     }
 }
+
+// MARK: - TableViewDelegate
+
+extension TimetableViewController: UITableViewDelegate {
+    
+}

@@ -10,20 +10,24 @@ import UIKit
 
 final class TracerViewCell: UICollectionViewCell {
     
+    // MARK: - Private Properties
+    
     private let nameLable = UILabel()
     private let emogiImage = UILabel()
     private let daysCountLable = UILabel()
     private let completeButton = UIButton()
     private var background = UIView()
+    private let currentDate = Date()
+    private var currentTracer: Tracker?
+    
+    // MARK: - Public Properties
     
     var daysCount: Int = 0
     var tracerChengeToday = false
-    private let currentDate = Date()
     var selectedDate = Date()
-    private var currentTracer: Tracker?
     var tracerViewController: TracersViewController?
     
-    // MARK: - Functions
+    // MARK: - Public Methods
     
     func setupViews(tracker: Tracker) {
         createBackground(color: tracker.color)
@@ -37,7 +41,7 @@ final class TracerViewCell: UICollectionViewCell {
         currentTracer = tracer
     }
     
-    // MARK: - Private Functions
+    // MARK: - Private Methods
     
     private func createBackground(color: UIColor) {
         background.translatesAutoresizingMaskIntoConstraints = false
@@ -56,12 +60,13 @@ final class TracerViewCell: UICollectionViewCell {
         nameLable.font = UIFont.systemFont(ofSize: 12)
         nameLable.textColor = .white
         nameLable.lineBreakMode = .byWordWrapping
+        nameLable.textAlignment = .left
+        nameLable.numberOfLines = 2
         addSubview(nameLable)
         NSLayoutConstraint.activate([
             nameLable.leadingAnchor.constraint(equalTo: background.leadingAnchor, constant: 12),
             nameLable.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -12),
-            nameLable.bottomAnchor.constraint(equalTo: background.bottomAnchor, constant: -12),
-            nameLable.heightAnchor.constraint(equalToConstant: 34)
+            nameLable.bottomAnchor.constraint(equalTo: background.bottomAnchor, constant: -12)
         ])
     }
     
@@ -178,6 +183,8 @@ final class TracerViewCell: UICollectionViewCell {
         }
         tracerViewController?.completedTrackers = newCompletedTrackers
     }
+    
+    // MARK: - Private Actions
     
     @objc private func didTapCompleteButton() {
         guard currentDate > selectedDate else { return }

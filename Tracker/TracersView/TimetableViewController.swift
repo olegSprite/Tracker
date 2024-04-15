@@ -8,12 +8,24 @@
 import Foundation
 import UIKit
 
+protocol TimetableViewControllerDelegate: AnyObject {
+    func saveCurrentTimetable(timetable: Set<Timetable>)
+}
+
 final class TimetableViewController: UIViewController {
+    
+    // MARK: - Private Properties
     
     private let timetableTableView = UITableView()
     private let completeButton = UIButton()
+    private var resultSetOfWeak = Set<Timetable>()
     
+    // MARK: - Public Properties
+    
+    weak var delegate: TimetableViewControllerDelegate?
     var daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +35,8 @@ final class TimetableViewController: UIViewController {
         addButton()
     }
     
+    // MARK: - Private Methods
+    
     private func setupNavBar() {
         title = "Расписание"
         navigationController?.navigationBar.prefersLargeTitles = false
@@ -30,7 +44,6 @@ final class TimetableViewController: UIViewController {
     
     private func setupTableView() {
         timetableTableView.dataSource = self
-        timetableTableView.delegate = self
         timetableTableView.layer.masksToBounds = true
         timetableTableView.layer.cornerRadius = 16
         view.addSubview(timetableTableView)
@@ -60,12 +73,40 @@ final class TimetableViewController: UIViewController {
             completeButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
+    // MARK: - Public Actions
+    
     @objc func switchValueChanged(sender: UISwitch) {
-            // Обрабатываем изменение состояния переключателя
-            print("Переключатель \(sender.isOn ? "включен" : "выключен")")
+        var weak: Timetable = .none
+        switch sender.tag {
+        case 0:
+            weak = .monday
+        case 1:
+            weak = .tuesday
+        case 2:
+            weak = .wednesday
+        case 3:
+            weak = .thursday
+        case 4:
+            weak = .friday
+        case 5:
+            weak = .saturday
+        case 6:
+            weak = .sunday
+        default:
+            weak = .none
         }
+        if sender.isOn {
+            resultSetOfWeak.insert(weak)
+        } else {
+            resultSetOfWeak.remove(weak)
+        }
+    }
+    
+    // MARK: - Private Actions
     
     @objc private func tapCompleteButton() {
-        print("кнопка работает")
+        delegate?.saveCurrentTimetable(timetable: resultSetOfWeak)
+        self.dismiss(animated: true)
     }
 }

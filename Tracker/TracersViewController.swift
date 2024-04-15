@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class TracersViewController: UIViewController {
+final class TracersViewController: UIViewController, CreateTracerViewControllerDelegate {
+    
+    // MARK: - Private Properties
     
     private let plugImageView = UIImageView()
     private let plugLable = UILabel()
@@ -16,28 +18,26 @@ final class TracersViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
     }()
+    private var curentDayOfWeak: Timetable = .none
     
-    private var categories: [TrackerCategory] = [
-        TrackerCategory(
-            heading: "Животные",
-            tracers: [
-                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .red, emojy: "🤣", timetable: [.friday]),
-                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .green, emojy: "🤣", timetable: [.friday]),
-                Tracker(id: UUID.init(), name: "Пожрать и выпить пива с друзьями", color: .black, emojy: "🤣", timetable: [.friday])
-            ])
-    ]
+    // MARK: - Public Properties
+    
+    var categories: [TrackerCategory] = []
     var curentCategories = [TrackerCategory]()
     var completedTrackers: [TrackerRecord] = []
-    private var curentDayOfWeak: Timetable = .none
     var currentDate: Date = Date()
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupViews()
         curentDayOfWeak = calculateDayOfWeak(date: Date())
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
+        setupViews()
     }
+    
+    // MARK: - Private Methods
     
     private func setupViews() {
         setupNavBar()
@@ -139,6 +139,8 @@ final class TracersViewController: UIViewController {
         }
     }
     
+    // MARK: - Public Methods
+    
     func calculateArrayOfWeak(weak: Timetable, categories: [TrackerCategory]) -> [TrackerCategory] {
         var resultArray = [TrackerCategory]()
         for category in categories {
@@ -178,7 +180,35 @@ final class TracersViewController: UIViewController {
         return result
     }
     
-    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+    func reloadCollectionAfterCreating() {
+        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
+        showPlugOrTracers()
+        tracersCollectionView.reloadData()
+    }
+    
+    func updateCategories(trackerCategory: TrackerCategory) {
+        var result: [TrackerCategory] = []
+        if categories.isEmpty {
+            result.append(trackerCategory)
+        }
+        for category in categories {
+            if category.heading != trackerCategory.heading {
+                result.append(category)
+                result.append(trackerCategory)
+            }
+            if category.heading == trackerCategory.heading {
+                let tracers = category.tracers + trackerCategory.tracers
+                let heading = category.heading
+                result.append(TrackerCategory(heading: heading, tracers: tracers))
+            }
+        }
+        categories = result
+        self.reloadCollectionAfterCreating()
+    }
+    
+    // MARK: - Private Actions
+    
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         curentDayOfWeak = calculateDayOfWeak(date: sender.date)
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
@@ -186,9 +216,11 @@ final class TracersViewController: UIViewController {
         tracersCollectionView.reloadData()
     }
     
-    @objc func didTapPlusButtonOnNavBar() {
-        let vc = UINavigationController(rootViewController: HabitOrEventViewController())
-        self.present(vc, animated: true)
+    @objc private func didTapPlusButtonOnNavBar() {
+        let vc = HabitOrEventViewController()
+        vc.originalViewController = self
+        let navController = UINavigationController(rootViewController: vc)
+        self.present(navController, animated: true)
     }
 }
 

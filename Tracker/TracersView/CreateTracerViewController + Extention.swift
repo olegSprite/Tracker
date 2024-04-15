@@ -8,26 +8,33 @@
 import Foundation
 import UIKit
 
+// MARK: - TableViewDelegate
+
 extension CreateTracerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-     
+        
         if indexPath.row == 0 {
-            let vc = UINavigationController(rootViewController: CattegoriesItCreactingViewController())
-            self.present(vc, animated: true)
+            let vc = CattegoriesItCreactingViewController()
+            let navController = UINavigationController(rootViewController: vc)
+            self.present(navController, animated: true)
         } else {
-            let vc = UINavigationController(rootViewController: TimetableViewController())
-            self.present(vc, animated: true)
+            let vc = TimetableViewController()
+            vc.delegate = self
+            let navController = UINavigationController(rootViewController: vc)
+            self.present(navController, animated: true)
         }
-     }
+    }
 }
+
+// MARK: - TableViewDataSource
 
 extension CreateTracerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return isTracer ? 2 : 1
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.accessoryType = .disclosureIndicator
@@ -41,5 +48,21 @@ extension CreateTracerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+}
+
+// MARK: - TextFieldDelegate
+
+extension CreateTracerViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text, !text.isEmpty {
+            if text.count >= 1 && text.count <= 38 {
+                textFieldСompleted = true
+            } else {
+                textFieldСompleted = false
+            }
+        }
+        enabledSaveButtonOrNot()
+        return true
     }
 }

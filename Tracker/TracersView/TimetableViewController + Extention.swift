@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+// MARK: - TableViewDataSource
+
 extension TimetableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -20,6 +22,7 @@ extension TimetableViewController: UITableViewDataSource {
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         let switchView = UISwitch()
         switchView.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+        switchView.tag = indexPath.row
         cell.accessoryView = switchView
         return cell
     }
@@ -27,8 +30,4 @@ extension TimetableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-}
-
-extension TimetableViewController: UITableViewDelegate {
-    
 }

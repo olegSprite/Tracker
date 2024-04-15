@@ -8,7 +8,13 @@
 import Foundation
 import UIKit
 
-final class CreateTracerViewController: UIViewController {
+protocol CreateTracerViewControllerDelegate: AnyObject {
+    func updateCategories(trackerCategory: TrackerCategory)
+}
+
+final class CreateTracerViewController: UIViewController, TimetableViewControllerDelegate {
+    
+    // MARK: - Private Properties
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -17,13 +23,48 @@ final class CreateTracerViewController: UIViewController {
     private let exitButton = UIButton()
     private let saveButton = UIButton()
     
+    // MARK: - Public Properties
+    
+    weak var delegate: CreateTracerViewControllerDelegate?
     var isTracer = false
+    var habitOrEventViewController: HabitOrEventViewController?
+    var timetable = Set<Timetable>()
+    var cattegory: String = "Без категории"
+    var textFieldСompleted = false
+    var timetableСompleted = false
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
         addViews()
+        self.hideKeyboardWhenTappedAround()
     }
+    
+    // MARK: - Public Methods
+    
+    func saveCurrentTimetable(timetable: Set<Timetable>) {
+        self.timetable = timetable
+        if timetable.isEmpty {
+            timetableСompleted = false
+        } else {
+            timetableСompleted = true
+        }
+        enabledSaveButtonOrNot()
+    }
+    
+    func enabledSaveButtonOrNot() {
+        if textFieldСompleted && timetableСompleted {
+            saveButton.isEnabled = true
+            saveButton.backgroundColor = .black
+        } else {
+            saveButton.isEnabled = false
+            saveButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
+        }
+    }
+    
+    // MARK: - Private Methods
     
     private func setupNavBar() {
         title = isTracer ? "Новая привычка" : "Новое нерегулярное событие"
@@ -48,6 +89,7 @@ final class CreateTracerViewController: UIViewController {
     }
     
     private func addNameTracerTextField() {
+        nameTracerTextField.delegate = self
         nameTracerTextField.placeholder = "Введите название трекера"
         nameTracerTextField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         nameTracerTextField.layer.masksToBounds = true
@@ -103,6 +145,7 @@ final class CreateTracerViewController: UIViewController {
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
         saveButton.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)
+        saveButton.isEnabled = false
         saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         saveButton.layer.masksToBounds = true
         saveButton.layer.cornerRadius = 16
@@ -116,21 +159,25 @@ final class CreateTracerViewController: UIViewController {
         ])
     }
     
+    // MARK: - Private Actions
+    
     @objc private func tapExitButton() {
-        // Нужна реализация нормального навигейшина, чтобы не дрочиться с костылями
         self.dismiss(animated: true)
-        self.navigationController?.presentedViewController?.dismiss(animated: true)
+        habitOrEventViewController?.dismiss(animated: true)
     }
     
     @objc private func tapSaveButton() {
-        
-    }
-}
-
-extension UITextField {
-    func setLeftPaddingPoints(_ amount:CGFloat) {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
-        self.leftView = paddingView
-        self.leftViewMode = .always
+        let resultTracer = Tracker(
+            id: UUID(),
+            name: nameTracerTextField.text ?? "Без текста",
+            color: .black,
+            emojy: "🙌",
+            timetable: Array(self.timetable))
+        let trackerCategory = TrackerCategory(
+            heading: cattegory,
+            tracers: [resultTracer])
+        delegate?.updateCategories(trackerCategory: trackerCategory)
+        self.dismiss(animated: true)
+        habitOrEventViewController?.dismiss(animated: true)
     }
 }

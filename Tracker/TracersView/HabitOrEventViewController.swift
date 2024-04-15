@@ -12,13 +12,17 @@ final class HabitOrEventViewController: UIViewController {
     
     private let habitButton = UIButton()
     private let tracerButton = UIButton()
-    var originalNavigationVC: UINavigationController?
+    var originalViewController: TracersViewController?
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
         setupViews()
     }
+    
+    // MARK: - Private Methods
     
     private func setupViews() {
         view.backgroundColor = .white
@@ -66,12 +70,15 @@ final class HabitOrEventViewController: UIViewController {
     
     private func goToNextVC(isTracer: Bool) {
         let vc = CreateTracerViewController()
-        vc.isTracer = isTracer
+        vc.isTracer = isTracer 
+        vc.habitOrEventViewController = self
+        vc.delegate = originalViewController
         let navBar = UINavigationController(rootViewController: vc)
         navBar.modalPresentationStyle = .popover
         self.present(navBar, animated: true)
     }
     
+    // MARK: - Private Actions
     
     @objc private func tapHubitButton() {
         goToNextVC(isTracer: false)

@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+// MARK: - CollectionViewDataSource
+
 extension TracersViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -37,23 +39,25 @@ extension TracersViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - CollectionViewDelegateFlowLayout
+
 extension TracersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width / 2, height: 148)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-            return 0
-        }
+        return 0
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-            let indexPath = IndexPath(row: 0, section: section)
-            let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-            return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
-                                                             height: UIView.layoutFittingExpandedSize.height),
-                                                             withHorizontalFittingPriority: .required,
-                                                             verticalFittingPriority: .fittingSizeLevel)
-        }
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
+                                                         height: UIView.layoutFittingExpandedSize.height),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
+    }
 }
 
 

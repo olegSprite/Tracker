@@ -18,6 +18,8 @@
 		D59B5EF02BBE9AF700FE4D67 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EEF2BBE9AF700FE4D67 /* TabBarViewController.swift */; };
 		D59B5EF22BBE9C8600FE4D67 /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EF12BBE9C8600FE4D67 /* StatisticViewController.swift */; };
 		D5A03A672BCA7E3900299B8D /* TimetableViewController + Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A03A662BCA7E3900299B8D /* TimetableViewController + Extention.swift */; };
+		D5A03A692BCD174800299B8D /* HideKayboardExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A03A682BCD174800299B8D /* HideKayboardExtention.swift */; };
+		D5A03A6E2BCD22BE00299B8D /* TextField + Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A03A6D2BCD22BE00299B8D /* TextField + Extention.swift */; };
 		D5B7FDFA2BC1868A006A943E /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7FDF92BC1868A006A943E /* Tracker.swift */; };
 		D5B7FDFC2BC188EF006A943E /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7FDFB2BC188EF006A943E /* TrackerCategory.swift */; };
 		D5B7FDFE2BC18939006A943E /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B7FDFD2BC18939006A943E /* TrackerRecord.swift */; };
@@ -64,6 +66,8 @@
 		D59B5EEF2BBE9AF700FE4D67 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		D59B5EF12BBE9C8600FE4D67 /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		D5A03A662BCA7E3900299B8D /* TimetableViewController + Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimetableViewController + Extention.swift"; sourceTree = "<group>"; };
+		D5A03A682BCD174800299B8D /* HideKayboardExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideKayboardExtention.swift; sourceTree = "<group>"; };
+		D5A03A6D2BCD22BE00299B8D /* TextField + Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField + Extention.swift"; sourceTree = "<group>"; };
 		D5B7FDF92BC1868A006A943E /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		D5B7FDFB2BC188EF006A943E /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		D5B7FDFD2BC18939006A943E /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
@@ -125,12 +129,11 @@
 		D59B5EBE2BBE8A8B00FE4D67 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				D5B7FE3F2BC2E8E7006A943E /* TracersView */,
-				D5B7FDF82BC18679006A943E /* Models */,
-				D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */,
 				D59B5EEF2BBE9AF700FE4D67 /* TabBarViewController.swift */,
 				D59B5EF12BBE9C8600FE4D67 /* StatisticViewController.swift */,
-				D59B5EC12BBE8A8B00FE4D67 /* SceneDelegate.swift */,
+				D5B7FE3F2BC2E8E7006A943E /* TracersView */,
+				D5B7FDF82BC18679006A943E /* Models */,
+				D5A03A6C2BCD226000299B8D /* Helpers */,
 				D59B5EC82BBE8A8E00FE4D67 /* Assets.xcassets */,
 				D59B5ECA2BBE8A8E00FE4D67 /* LaunchScreen.storyboard */,
 				D59B5ECD2BBE8A8E00FE4D67 /* Info.plist */,
@@ -155,6 +158,17 @@
 			path = TrackerUITests;
 			sourceTree = "<group>";
 		};
+		D5A03A6C2BCD226000299B8D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */,
+				D59B5EC12BBE8A8B00FE4D67 /* SceneDelegate.swift */,
+				D5A03A682BCD174800299B8D /* HideKayboardExtention.swift */,
+				D5A03A6D2BCD22BE00299B8D /* TextField + Extention.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		D5B7FDF82BC18679006A943E /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,8 +184,8 @@
 			children = (
 				D5F717332BC5181300B1B99E /* CreatingTracerView */,
 				D59B5EC32BBE8A8B00FE4D67 /* TracersViewController.swift */,
-				D5B7FE012BC2E4B7006A943E /* TracerViewCell.swift */,
 				D5B7FDFF2BC2E2A2006A943E /* Extention TracersViewController.swift */,
+				D5B7FE012BC2E4B7006A943E /* TracerViewCell.swift */,
 				D5F717312BC4589C00B1B99E /* HeaderViewController.swift */,
 			);
 			path = TracersView;
@@ -322,9 +336,11 @@
 			files = (
 				D5B7FDFA2BC1868A006A943E /* Tracker.swift in Sources */,
 				D5A03A672BCA7E3900299B8D /* TimetableViewController + Extention.swift in Sources */,
+				D5A03A6E2BCD22BE00299B8D /* TextField + Extention.swift in Sources */,
 				D5F717372BC551EC00B1B99E /* CreateTracerViewController.swift in Sources */,
 				D5B7FE022BC2E4B7006A943E /* TracerViewCell.swift in Sources */,
 				D5F717322BC4589C00B1B99E /* HeaderViewController.swift in Sources */,
+				D5A03A692BCD174800299B8D /* HideKayboardExtention.swift in Sources */,
 				D5F7173B2BC666C000B1B99E /* CreateTracerViewController + Extention.swift in Sources */,
 				D5F7173F2BC6E90300B1B99E /* CattegoriesItCreactingViewController.swift in Sources */,
 				D5B7FDFE2BC18939006A943E /* TrackerRecord.swift in Sources */,

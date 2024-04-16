@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class TracersViewController: UIViewController, CreateTracerViewControllerDelegate {
+final class TrackersViewController: UIViewController, CreateTrackerViewControllerDelegate, TrackerViewCellDelegate {
     
     // MARK: - Private Properties
     
     private let plugImageView = UIImageView()
     private let plugLable = UILabel()
-    private var tracersCollectionView: UICollectionView = {
+    private var trackersCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
@@ -73,22 +73,22 @@ final class TracersViewController: UIViewController, CreateTracerViewControllerD
     }
     
     private func addTrecersCollectionView() {
-        tracersCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(tracersCollectionView)
+        trackersCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(trackersCollectionView)
         NSLayoutConstraint.activate([
-            tracersCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tracersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tracersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tracersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 16)
+            trackersCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 16)
         ])
     }
     
     private func setupTrecersCollectionView() {
-        self.tracersCollectionView.dataSource = self
-        self.tracersCollectionView.delegate = self
-        tracersCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        tracersCollectionView.register(TracerViewCell.self, forCellWithReuseIdentifier: "cell")
-        tracersCollectionView.register(HeaderViewController.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        self.trackersCollectionView.dataSource = self
+        self.trackersCollectionView.delegate = self
+        trackersCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        trackersCollectionView.register(TracerViewCell.self, forCellWithReuseIdentifier: "cell")
+        trackersCollectionView.register(HeaderViewController.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
     }
     
     private func addPlugImage() {
@@ -183,7 +183,7 @@ final class TracersViewController: UIViewController, CreateTracerViewControllerD
     func reloadCollectionAfterCreating() {
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         showPlugOrTracers()
-        tracersCollectionView.reloadData()
+        trackersCollectionView.reloadData()
     }
     
     func updateCategories(trackerCategory: TrackerCategory) {
@@ -206,6 +206,10 @@ final class TracersViewController: UIViewController, CreateTracerViewControllerD
         self.reloadCollectionAfterCreating()
     }
     
+    func updateCompletedTrackers(newCompletedTrackers: [TrackerRecord]) {
+        self.completedTrackers = newCompletedTrackers
+    }
+    
     // MARK: - Private Actions
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
@@ -213,7 +217,7 @@ final class TracersViewController: UIViewController, CreateTracerViewControllerD
         curentDayOfWeak = calculateDayOfWeak(date: sender.date)
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         showPlugOrTracers()
-        tracersCollectionView.reloadData()
+        trackersCollectionView.reloadData()
     }
     
     @objc private func didTapPlusButtonOnNavBar() {

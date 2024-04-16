@@ -11,7 +11,7 @@ import UIKit
 final class HabitOrEventViewController: UIViewController {
     
     private let habitButton = UIButton()
-    private let tracerButton = UIButton()
+    private let trackerButton = UIButton()
     var originalViewController: TracersViewController?
     
     // MARK: - Lifecycle
@@ -58,13 +58,13 @@ final class HabitOrEventViewController: UIViewController {
     }
     
     private func addTracerButton() {
-        createButton(button: self.tracerButton, title: "Привычка", selector: #selector(tapTracerButton))
-        tracerButton.translatesAutoresizingMaskIntoConstraints = false
+        createButton(button: self.trackerButton, title: "Привычка", selector: #selector(tapTracerButton))
+        trackerButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tracerButton.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: -8),
-            tracerButton.heightAnchor.constraint(equalToConstant: 60),
-            tracerButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            tracerButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+            trackerButton.bottomAnchor.constraint(equalTo: view.centerYAnchor, constant: -8),
+            trackerButton.heightAnchor.constraint(equalToConstant: 60),
+            trackerButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            trackerButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
     }
     

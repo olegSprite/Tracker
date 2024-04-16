@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+protocol TrackerViewCellDelegate: AnyObject {
+    func updateCompletedTrackers(newCompletedTrackers: [TrackerRecord])
+}
+
 final class TracerViewCell: UICollectionViewCell {
     
     // MARK: - Private Properties
@@ -25,7 +29,8 @@ final class TracerViewCell: UICollectionViewCell {
     var daysCount: Int = 0
     var tracerChengeToday = false
     var selectedDate = Date()
-    var tracerViewController: TracersViewController?
+    var tracerViewController: TrackersViewController?
+    weak var delegate: TrackerViewCellDelegate?
     
     // MARK: - Public Methods
     
@@ -181,7 +186,7 @@ final class TracerViewCell: UICollectionViewCell {
                 newCompletedTrackers.append(i)
             }
         }
-        tracerViewController?.completedTrackers = newCompletedTrackers
+        delegate?.updateCompletedTrackers(newCompletedTrackers: newCompletedTrackers)
     }
     
     // MARK: - Private Actions

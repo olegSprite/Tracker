@@ -8,11 +8,11 @@
 import Foundation
 import UIKit
 
-protocol CreateTracerViewControllerDelegate: AnyObject {
+protocol CreateTrackerViewControllerDelegate: AnyObject {
     func updateCategories(trackerCategory: TrackerCategory)
 }
 
-final class CreateTracerViewController: UIViewController, TimetableViewControllerDelegate {
+final class CreateTrackerViewController: UIViewController, TimetableViewControllerDelegate {
     
     // MARK: - Private Properties
     
@@ -25,7 +25,7 @@ final class CreateTracerViewController: UIViewController, TimetableViewControlle
     
     // MARK: - Public Properties
     
-    weak var delegate: CreateTracerViewControllerDelegate?
+    weak var delegate: CreateTrackerViewControllerDelegate?
     var isTracer = false
     var habitOrEventViewController: HabitOrEventViewController?
     var timetable = Set<Timetable>()

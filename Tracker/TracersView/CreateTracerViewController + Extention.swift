@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - TableViewDelegate
 
-extension CreateTracerViewController: UITableViewDelegate {
+extension CreateTrackerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -29,7 +29,7 @@ extension CreateTracerViewController: UITableViewDelegate {
 
 // MARK: - TableViewDataSource
 
-extension CreateTracerViewController: UITableViewDataSource {
+extension CreateTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return isTracer ? 2 : 1
@@ -53,7 +53,7 @@ extension CreateTracerViewController: UITableViewDataSource {
 
 // MARK: - TextFieldDelegate
 
-extension CreateTracerViewController: UITextFieldDelegate {
+extension CreateTrackerViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let text = textField.text, !text.isEmpty {
             if text.count >= 1 && text.count <= 38 {

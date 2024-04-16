@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - CollectionViewDataSource
 
-extension TracersViewController: UICollectionViewDataSource {
+extension TrackersViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         curentCategories.count
@@ -29,11 +29,12 @@ extension TracersViewController: UICollectionViewDataSource {
         cell.tracerChengeToday = completeTracerOnDateOrNot(tracer: tracer, completedTrackers: completedTrackers, date: currentDate)
         cell.currentTracer(tracer: tracer)
         cell.setupViews(tracker: tracer)
+        cell.delegate = self
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! HeaderViewController
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? HeaderViewController else { return  UICollectionReusableView()}
         view.titleLabel.text = curentCategories[indexPath.section].heading
         return view
     }
@@ -41,7 +42,7 @@ extension TracersViewController: UICollectionViewDataSource {
 
 // MARK: - CollectionViewDelegateFlowLayout
 
-extension TracersViewController: UICollectionViewDelegateFlowLayout {
+extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width / 2, height: 148)
     }

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class CattegoriesItCreactingViewController: UIViewController {
+final class CategoriesItCreactingViewController: UIViewController {
     
     // MARK: - Lifecycle
     

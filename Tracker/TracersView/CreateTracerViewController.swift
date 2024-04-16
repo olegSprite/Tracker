@@ -38,6 +38,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
+        setupVCforEvent()
         addViews()
         self.hideKeyboardWhenTappedAround()
     }
@@ -51,6 +52,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         } else {
             timetableСompleted = true
         }
+        buttonsOfCattegoryOrTimetableTableView.reloadData()
         enabledSaveButtonOrNot()
     }
     
@@ -64,11 +66,47 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         }
     }
     
+    func returnTimetableToTableView() -> String? {
+        var result: String = ""
+        if timetable.isEmpty { return nil }
+        // Я понимаю, что это очень плохой алгоритм, но пока не придумал как по другому отсортировать массив XD
+        for i in Array(timetable) {
+            if i == .monday {result += "Пн, "}
+        }
+        for i in Array(timetable) {
+            if i == .tuesday {result += "Вт, "}
+        }
+        for i in Array(timetable) {
+            if i == .wednesday {result += "Ср, "}
+        }
+        for i in Array(timetable) {
+            if i == .thursday {result += "Чт, "}
+        }
+        for i in Array(timetable) {
+            if i == .friday {result += "Пт, "}
+        }
+        for i in Array(timetable) {
+            if i == .saturday {result += "Сб, "}
+        }
+        for i in Array(timetable) {
+            if i == .sunday {result += "Вс, "}
+        }
+        result.removeLast(2)
+        return result
+    }
+    
     // MARK: - Private Methods
     
     private func setupNavBar() {
         title = isTracer ? "Новая привычка" : "Новое нерегулярное событие"
         navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    private func setupVCforEvent() {
+        if !isTracer {
+            timetable.insert(.none)
+        }
+        timetableСompleted = true
     }
     
     private func addViews() {
@@ -108,7 +146,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     private func addButtonsOfCattegoryOrTimetableTableView() {
         buttonsOfCattegoryOrTimetableTableView.dataSource = self
         buttonsOfCattegoryOrTimetableTableView.delegate = self
-        buttonsOfCattegoryOrTimetableTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         buttonsOfCattegoryOrTimetableTableView.layer.masksToBounds = true
         buttonsOfCattegoryOrTimetableTableView.layer.cornerRadius = 16
         contentView.addSubview(buttonsOfCattegoryOrTimetableTableView)

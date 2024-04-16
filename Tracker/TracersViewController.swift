@@ -147,7 +147,7 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
             var resultTracersInCategory = [Tracker]()
             for tracer in category.tracers {
                 for i in tracer.timetable {
-                    if i == weak {
+                    if i == weak || i == .none {
                         resultTracersInCategory.append(tracer)
                     }
                 }
@@ -206,8 +206,42 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
         self.reloadCollectionAfterCreating()
     }
     
-    func updateCompletedTrackers(newCompletedTrackers: [TrackerRecord]) {
-        self.completedTrackers = newCompletedTrackers
+    // MARK: - TrackerViewCellDelegate
+    
+    func writeCompletedTracker(tracker: Tracker) {
+        let tracerRecord = TrackerRecord(id: tracker.id, date: currentDate)
+        var oldCompletedTrackers = completedTrackers
+        var newCompletedTrackers: [TrackerRecord] = [tracerRecord]
+        completedTrackers = oldCompletedTrackers + newCompletedTrackers
+    }
+    
+    func deleteCompletedTracer(tracker: Tracker) {
+        let tracerRecord = TrackerRecord(id: tracker.id, date: currentDate)
+        let oldCompletedTrackers = completedTrackers
+        var newCompletedTrackers: [TrackerRecord] = [tracerRecord]
+        for i in oldCompletedTrackers {
+            if i.id != tracker.id {
+                newCompletedTrackers.append(i)
+            }
+            if i.id == tracker.id && i.date != tracerRecord.date {
+                newCompletedTrackers.append(i)
+            }
+        }
+        completedTrackers = newCompletedTrackers
+    }
+    
+    func deleteTracerFromCategories(tracker: Tracker) {
+        var newCategories: [TrackerCategory] = []
+        for category in categories {
+            var resultTrackers: [Tracker] = []
+            for i in category.tracers {
+                if tracker.id != i.id {
+                    resultTrackers.append(i)
+                }
+            }
+            newCategories.append(TrackerCategory(heading: category.heading, tracers: resultTrackers))
+        }
+        categories = newCategories
     }
     
     // MARK: - Private Actions

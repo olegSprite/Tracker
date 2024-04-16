@@ -13,9 +13,8 @@ import UIKit
 extension CreateTrackerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         if indexPath.row == 0 {
-            let vc = CattegoriesItCreactingViewController()
+            let vc = CategoriesItCreactingViewController()
             let navController = UINavigationController(rootViewController: vc)
             self.present(navController, animated: true)
         } else {
@@ -36,12 +35,17 @@ extension CreateTrackerViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         cell.accessoryType = .disclosureIndicator
         cell.textLabel?.textColor = .black
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         let text = indexPath.row == 0 ? "Категория" : "Расписание"
         cell.textLabel?.text = text
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
+        let subText = indexPath.row == 0 ? nil : returnTimetableToTableView()
+        cell.detailTextLabel?.text = subText
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17)
+        cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
         cell.selectionStyle = .none
         return cell
     }

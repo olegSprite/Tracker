@@ -21,7 +21,7 @@ final class TabBarViewController: UITabBarController {
     private func createTabBar() {
         viewControllers = [
             createViewController(
-                viewController: TracersViewController(),
+                viewController: TrackersViewController(),
                 title: "Трекеры",
                 image: UIImage(systemName: "record.circle.fill")),
             createViewController(

@@ -12,7 +12,7 @@ final class HabitOrEventViewController: UIViewController {
     
     private let habitButton = UIButton()
     private let trackerButton = UIButton()
-    var originalViewController: TracersViewController?
+    var originalViewController: TrackersViewController?
     
     // MARK: - Lifecycle
     
@@ -69,7 +69,7 @@ final class HabitOrEventViewController: UIViewController {
     }
     
     private func goToNextVC(isTracer: Bool) {
-        let vc = CreateTracerViewController()
+        let vc = CreateTrackerViewController()
         vc.isTracer = isTracer 
         vc.habitOrEventViewController = self
         vc.delegate = originalViewController

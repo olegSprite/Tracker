@@ -23,6 +23,7 @@ extension TimetableViewController: UITableViewDataSource {
         let switchView = UISwitch()
         switchView.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         switchView.tag = indexPath.row
+        switchView.onTintColor = UIColor(red: 55/255, green: 114/255, blue: 231/255, alpha: 1)
         cell.accessoryView = switchView
         return cell
     }

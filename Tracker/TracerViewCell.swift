@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 
 protocol TrackerViewCellDelegate: AnyObject {
-    func updateCompletedTrackers(newCompletedTrackers: [TrackerRecord])
+    func writeCompletedTracker(tracker: Tracker)
+    func deleteCompletedTracer(tracker: Tracker)
+    func deleteTracerFromCategories(tracker: Tracker)
 }
 
 final class TracerViewCell: UICollectionViewCell {
@@ -163,30 +165,12 @@ final class TracerViewCell: UICollectionViewCell {
     
     private func writeCompletedTracker() {
         guard let tracer = currentTracer else { return }
-        let result = TrackerRecord(id: tracer.id, date: self.selectedDate)
-        var oldCompletedTrackers = tracerViewController?.completedTrackers
-        var newCompletedTrackers: [TrackerRecord] = []
-        oldCompletedTrackers?.append(result)
-        guard let old = oldCompletedTrackers else { return }
-        newCompletedTrackers = old
-        tracerViewController?.completedTrackers = newCompletedTrackers
+        delegate?.writeCompletedTracker(tracker: tracer)
     }
     
     private func deleteCompletedTracer() {
         guard let tracer = currentTracer else { return }
-        let recordTracer = TrackerRecord(id: tracer.id, date: selectedDate)
-        let oldCompletedTrackers = tracerViewController?.completedTrackers
-        var newCompletedTrackers: [TrackerRecord] = []
-        guard let old = oldCompletedTrackers else { return }
-        for i in old {
-            if i.id != recordTracer.id {
-                newCompletedTrackers.append(i)
-            }
-            if i.id == recordTracer.id && i.date != recordTracer.date {
-                newCompletedTrackers.append(i)
-            }
-        }
-        delegate?.updateCompletedTrackers(newCompletedTrackers: newCompletedTrackers)
+        delegate?.deleteCompletedTracer(tracker: tracer)
     }
     
     // MARK: - Private Actions
@@ -196,6 +180,8 @@ final class TracerViewCell: UICollectionViewCell {
         if tracerChengeToday == false {
             plusDaysCount()
             writeCompletedTracker()
+            guard let tracer = currentTracer else { return }
+            delegate?.deleteTracerFromCategories(tracker: tracer)
         } else {
             minesDaysCount()
             deleteCompletedTracer()

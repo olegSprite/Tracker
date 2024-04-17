@@ -18,7 +18,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let nameTracerTextField = UITextField()
+    private let nameTracerTextField = CustomTextField()
     private let buttonsOfCattegoryOrTimetableTableView = UITableView()
     private let exitButton = UIButton()
     private let saveButton = UIButton()
@@ -129,6 +129,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     private func addNameTracerTextField() {
         nameTracerTextField.delegate = self
         nameTracerTextField.placeholder = "Введите название трекера"
+        nameTracerTextField.clearButtonMode = .whileEditing
         nameTracerTextField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         nameTracerTextField.layer.masksToBounds = true
         nameTracerTextField.layer.cornerRadius = 16

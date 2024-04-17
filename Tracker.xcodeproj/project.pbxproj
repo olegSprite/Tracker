@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D589EBB42BCFB8B8009E7469 /* EmogiAndColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */; };
 		D59B5EC02BBE8A8B00FE4D67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */; };
 		D59B5EC22BBE8A8B00FE4D67 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EC12BBE8A8B00FE4D67 /* SceneDelegate.swift */; };
 		D59B5EC42BBE8A8B00FE4D67 /* TracersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EC32BBE8A8B00FE4D67 /* TracersViewController.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmogiAndColorCell.swift; sourceTree = "<group>"; };
 		D59B5EBC2BBE8A8B00FE4D67 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D59B5EC12BBE8A8B00FE4D67 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				D5F717342BC5187100B1B99E /* HabitOrEventViewController.swift */,
 				D5F717362BC551EC00B1B99E /* CreateTracerViewController.swift */,
 				D5F7173A2BC666C000B1B99E /* CreateTracerViewController + Extention.swift */,
+				D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */,
 				D5F7173E2BC6E90300B1B99E /* CattegoriesItCreactingViewController.swift */,
 				D5F717402BC6E9CA00B1B99E /* TimetableViewController.swift */,
 				D5A03A662BCA7E3900299B8D /* TimetableViewController + Extention.swift */,
@@ -339,6 +342,7 @@
 				D5A03A6E2BCD22BE00299B8D /* CustomTextField.swift in Sources */,
 				D5F717372BC551EC00B1B99E /* CreateTracerViewController.swift in Sources */,
 				D5B7FE022BC2E4B7006A943E /* TracerViewCell.swift in Sources */,
+				D589EBB42BCFB8B8009E7469 /* EmogiAndColorCell.swift in Sources */,
 				D5F717322BC4589C00B1B99E /* HeaderViewController.swift in Sources */,
 				D5A03A692BCD174800299B8D /* HideKayboardExtention.swift in Sources */,
 				D5F7173B2BC666C000B1B99E /* CreateTracerViewController + Extention.swift in Sources */,

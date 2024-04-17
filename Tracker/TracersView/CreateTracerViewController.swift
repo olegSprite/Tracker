@@ -22,6 +22,11 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     private let buttonsOfCattegoryOrTimetableTableView = UITableView()
     private let exitButton = UIButton()
     private let saveButton = UIButton()
+    private var emogiAndColorCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
     
     // MARK: - Public Properties
     
@@ -114,13 +119,14 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         addScrollView()
         addNameTracerTextField()
         addButtonsOfCattegoryOrTimetableTableView()
+        addEmogiAndColorCollectionView()
         addExitButton()
         addSaveButton()
     }
     
     private func addScrollView() {
         scrollView.frame = view.bounds
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 300)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 500)
         contentView.frame.size = scrollView.contentSize
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -159,6 +165,25 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         ])
     }
     
+    private func addEmogiAndColorCollectionView() {
+        setupEmogiAndColorCollectionView()
+        emogiAndColorCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(emogiAndColorCollectionView)
+        NSLayoutConstraint.activate([
+            emogiAndColorCollectionView.topAnchor.constraint(equalTo: buttonsOfCattegoryOrTimetableTableView.bottomAnchor, constant: 32),
+            emogiAndColorCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            emogiAndColorCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            emogiAndColorCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+    
+    private func setupEmogiAndColorCollectionView() {
+        self.emogiAndColorCollectionView.dataSource = self
+        self.emogiAndColorCollectionView.delegate = self
+        emogiAndColorCollectionView.isScrollEnabled = false
+        emogiAndColorCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+    }
+    
     private func addExitButton() {
         exitButton.setTitle("Отменить", for: .normal)
         exitButton.setTitleColor(UIColor(red: 245/255, green: 107/255, blue: 108/255, alpha: 1), for: .normal)
@@ -173,8 +198,8 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         NSLayoutConstraint.activate([
             exitButton.heightAnchor.constraint(equalToConstant: 60),
             exitButton.widthAnchor.constraint(equalToConstant: 166),
-            exitButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -4),
-            exitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34)
+            exitButton.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -4),
+            exitButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -34)
         ])
     }
     
@@ -192,8 +217,8 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         NSLayoutConstraint.activate([
             saveButton.heightAnchor.constraint(equalToConstant: 60),
             saveButton.widthAnchor.constraint(equalToConstant: 166),
-            saveButton.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: 4),
-            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34)
+            saveButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 4),
+            saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -34)
         ])
     }
     

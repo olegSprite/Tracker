@@ -70,3 +70,34 @@ extension CreateTrackerViewController: UITextFieldDelegate {
         return true
     }
 }
+
+// MARK: - CollectionViewDelegate
+
+extension CreateTrackerViewController: UICollectionViewDelegate {
+    
+}
+
+// MARK: - CollectionViewDataSource
+
+extension CreateTrackerViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 4
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 18
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        cell.contentView.backgroundColor = .red
+        return cell
+    }
+}
+
+// MARK: - CollectionViewDataSource
+
+extension CreateTrackerViewController: UICollectionViewDelegateFlowLayout {
+    
+}

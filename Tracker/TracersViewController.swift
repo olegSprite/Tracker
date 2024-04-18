@@ -7,30 +7,88 @@
 
 import UIKit
 
-final class TracersViewController: UIViewController {
+final class TrackersViewController: UIViewController, CreateTrackerViewControllerDelegate, TrackerViewCellDelegate {
+    
+    // MARK: - Private Properties
     
     private let plugImageView = UIImageView()
     private let plugLable = UILabel()
-
+    private var trackersCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
+    private var curentDayOfWeak: Timetable = .none
+    
+    // MARK: - Public Properties
+    
+    var categories: [TrackerCategory] = []
+    var curentCategories = [TrackerCategory]()
+    var completedTrackers: [TrackerRecord] = []
+    var currentDate: Date = Date()
+    
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        curentDayOfWeak = calculateDayOfWeak(date: Date())
+        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         setupViews()
     }
     
+    // MARK: - Private Methods
+    
     private func setupViews() {
         setupNavBar()
-        addPlugImage()
-        addPlugLable()
+        showPlugOrTracers()
     }
     
     private func setupNavBar() {
         title = "Трекеры"
         navigationController?.navigationBar.prefersLargeTitles = true
-        
-        let leftButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: nil, action: nil)
+        let leftButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(didTapPlusButtonOnNavBar))
         leftButton.tintColor = .black
         self.navigationItem.leftBarButtonItem = leftButton
+        
+        let datePicker = UIDatePicker()
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.datePickerMode = .date
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+        
+        let searchField = UISearchController(searchResultsController: nil)
+        searchField.automaticallyShowsCancelButton = true
+        self.navigationItem.searchController = searchField
+    }
+    
+    private func showPlugOrTracers() {
+        if curentCategories.isEmpty {
+            addPlugImage()
+            addPlugLable()
+        } else {
+            addTrecersCollectionView()
+            setupTrecersCollectionView()
+        }
+    }
+    
+    private func addTrecersCollectionView() {
+        trackersCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(trackersCollectionView)
+        NSLayoutConstraint.activate([
+            trackersCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 16)
+        ])
+    }
+    
+    private func setupTrecersCollectionView() {
+        self.trackersCollectionView.dataSource = self
+        self.trackersCollectionView.delegate = self
+        trackersCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        trackersCollectionView.register(TracerViewCell.self, forCellWithReuseIdentifier: "cell")
+        trackersCollectionView.register(HeaderViewController.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
     }
     
     private func addPlugImage() {
@@ -54,6 +112,153 @@ final class TracersViewController: UIViewController {
             plugLable.topAnchor.constraint(equalTo: plugImageView.bottomAnchor, constant: 8),
             plugLable.centerXAnchor.constraint(equalTo: plugImageView.centerXAnchor)
         ])
+    }
+    
+    private func calculateDayOfWeak(date: Date) -> Timetable {
+        let selectedDate = date
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: selectedDate)
+        switch weekday {
+        case 1:
+            return .sunday
+        case 2:
+            return .monday
+        case 3:
+            return .tuesday
+        case 4:
+            return .wednesday
+        case 5:
+            return .thursday
+        case 6:
+            return .friday
+        case 7:
+            return .saturday
+        default:
+            print("Ошибка получения дня недели")
+            return .none
+        }
+    }
+    
+    // MARK: - Public Methods
+    
+    func calculateArrayOfWeak(weak: Timetable, categories: [TrackerCategory]) -> [TrackerCategory] {
+        var resultArray = [TrackerCategory]()
+        for category in categories {
+            var resultTracersInCategory = [Tracker]()
+            for tracer in category.tracers {
+                for i in tracer.timetable {
+                    if i == weak || i == .none {
+                        resultTracersInCategory.append(tracer)
+                    }
+                }
+            }
+            if !resultTracersInCategory.isEmpty {
+                let resultOfCategory = TrackerCategory(heading: category.heading, tracers: resultTracersInCategory)
+                resultArray.append(resultOfCategory)
+            }
+        }
+        return resultArray
+    }
+    
+    func calculateCountOfDayOnDate(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Int {
+        var result: Int = 0
+        for i in completedTrackers {
+            if i.id == tracer.id {
+                result += 1
+            }
+        }
+        return result
+    }
+    
+    func completeTracerOnDateOrNot(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Bool {
+        var result = false
+        for i in completedTrackers {
+            if i.id == tracer.id && i.date == date {
+                result = true
+            }
+        }
+        return result
+    }
+    
+    func reloadCollectionAfterCreating() {
+        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
+        showPlugOrTracers()
+        trackersCollectionView.reloadData()
+    }
+    
+    func updateCategories(trackerCategory: TrackerCategory) {
+        var result: [TrackerCategory] = []
+        if categories.isEmpty {
+            result.append(trackerCategory)
+        }
+        for category in categories {
+            if category.heading != trackerCategory.heading {
+                result.append(category)
+                result.append(trackerCategory)
+            }
+            if category.heading == trackerCategory.heading {
+                let tracers = category.tracers + trackerCategory.tracers
+                let heading = category.heading
+                result.append(TrackerCategory(heading: heading, tracers: tracers))
+            }
+        }
+        categories = result
+        self.reloadCollectionAfterCreating()
+    }
+    
+    // MARK: - TrackerViewCellDelegate
+    
+    func writeCompletedTracker(tracker: Tracker) {
+        let tracerRecord = TrackerRecord(id: tracker.id, date: currentDate)
+        var oldCompletedTrackers = completedTrackers
+        var newCompletedTrackers: [TrackerRecord] = [tracerRecord]
+        completedTrackers = oldCompletedTrackers + newCompletedTrackers
+    }
+    
+    func deleteCompletedTracer(tracker: Tracker) {
+        let tracerRecord = TrackerRecord(id: tracker.id, date: currentDate)
+        let oldCompletedTrackers = completedTrackers
+        var newCompletedTrackers: [TrackerRecord] = [tracerRecord]
+        for i in oldCompletedTrackers {
+            if i.id != tracker.id {
+                newCompletedTrackers.append(i)
+            }
+            if i.id == tracker.id && i.date != tracerRecord.date {
+                newCompletedTrackers.append(i)
+            }
+        }
+        completedTrackers = newCompletedTrackers
+    }
+    
+    func deleteTracerFromCategories(tracker: Tracker) {
+        var newCategories: [TrackerCategory] = []
+        for category in categories {
+            var resultTrackers: [Tracker] = []
+            for i in category.tracers {
+                if tracker.id != i.id {
+                    resultTrackers.append(i)
+                }
+            }
+            newCategories.append(TrackerCategory(heading: category.heading, tracers: resultTrackers))
+        }
+        categories = newCategories
+    }
+    
+    // MARK: - Private Actions
+    
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        currentDate = sender.date
+        curentDayOfWeak = calculateDayOfWeak(date: sender.date)
+        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
+        showPlugOrTracers()
+        trackersCollectionView.reloadData()
+    }
+    
+    @objc private func didTapPlusButtonOnNavBar() {
+        let vc = HabitOrEventViewController()
+        vc.originalViewController = self
+        let navController = UINavigationController(rootViewController: vc)
+        self.present(navController, animated: true)
     }
 }
 

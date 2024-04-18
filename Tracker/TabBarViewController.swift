@@ -13,12 +13,15 @@ final class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createTabBar()
+        if #available(iOS 15.0, *) {
+            UITabBar.appearance().scrollEdgeAppearance = UITabBarAppearance()
+        }
     }
     
     private func createTabBar() {
         viewControllers = [
             createViewController(
-                viewController: TracersViewController(),
+                viewController: TrackersViewController(),
                 title: "Трекеры",
                 image: UIImage(systemName: "record.circle.fill")),
             createViewController(

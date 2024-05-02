@@ -29,7 +29,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         let scrollView = UIScrollView()
         scrollView.frame = view.bounds
         scrollView.contentSize = contentSize
-        
         return scrollView
     }()
     private var contentSize: CGSize {
@@ -40,6 +39,12 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         contentView.frame.size = contentSize
         return contentView
     }()
+    private lazy var attentionLable: UILabel = {
+        let attentionLable = UILabel()
+        return attentionLable
+    }()
+    private let trackerStore = TrackerStore.shared
+    private let tracerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Public Properties
     
@@ -65,6 +70,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         setupVCforEvent()
         addViews()
         self.hideKeyboardWhenTappedAround()
+        tracerCategoryStore.createTracerCategory(heading: cattegory)
     }
     
     // MARK: - Public Methods
@@ -117,6 +123,17 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         }
         result.removeLast(2)
         return result
+    }
+    
+    func addTextAttention() {
+        attentionLable.text = "Ограничение 38 символов"
+        attentionLable.font = UIFont.systemFont(ofSize: 17)
+        attentionLable.textColor = .red
+        contentView.addSubview(attentionLable)
+        NSLayoutConstraint.activate([
+            attentionLable.topAnchor.constraint(equalTo: nameTracerTextField.bottomAnchor, constant: 8),
+            attentionLable.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ])
     }
     
     // MARK: - Private Methods
@@ -256,7 +273,8 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         let trackerCategory = TrackerCategory(
             heading: cattegory,
             tracers: [resultTracer])
-        delegate?.updateCategories(trackerCategory: trackerCategory)
+//        delegate?.updateCategories(trackerCategory: trackerCategory)
+        trackerStore.saveTracer(tracer: resultTracer, category: <#T##TrackerCategoryCoreData#>)
         self.dismiss(animated: true)
         habitOrEventViewController?.dismiss(animated: true)
     }

@@ -16,7 +16,7 @@ struct Tracker {
     let timetable: [Timetable]
 }
 
-enum Timetable: Equatable {
+enum Timetable: Equatable, Codable {
     case monday
     case tuesday
     case wednesday

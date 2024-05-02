@@ -19,6 +19,7 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
         return collectionView
     }()
     private var curentDayOfWeak: Timetable = .none
+    private let trackerCategoryStore = TrackerCategoryStore.shared
     
     // MARK: - Public Properties
     
@@ -32,6 +33,7 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        categories = trackerCategoryStore.fetchTracerCategory()
         curentDayOfWeak = calculateDayOfWeak(date: Date())
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         setupViews()

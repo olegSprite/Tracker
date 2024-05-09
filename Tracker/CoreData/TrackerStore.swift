@@ -23,15 +23,23 @@ final class TrackerStore: NSObject {
     
     // MARK: - Create
     
-    func saveTracer(tracer: Tracker, category: TrackerCategoryCoreData) {
+    func saveTracer(tracker: Tracker, category: TrackerCategoryCoreData) {
         guard let tracerEntityDescription = NSEntityDescription.entity(forEntityName: "TrackerCoreData", in: context) else { return }
         let tracerEntity = TrackerCoreData(entity: tracerEntityDescription, insertInto: context)
-        tracerEntity.color = tracer.color
-        tracerEntity.emoji = tracer.emojy
-        tracerEntity.id = tracer.id
-        tracerEntity.name = tracer.name
-        tracerEntity.timetable = tracer.timetable as NSObject
-        tracerEntity.category = category
+        tracerEntity.color = tracker.color
+        tracerEntity.emoji = tracker.emojy
+        tracerEntity.id = tracker.id
+        tracerEntity.name = tracker.name
+        tracerEntity.timetable = tracker.timetable as NSObject 
+        category.addToTrackers(tracerEntity)
         appDelegate.saveContext()
+    }
+    
+    // MARK: - Read
+    
+    func fetchTrackers() -> [TrackerCoreData] {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        guard let trackersCoreData = try? context.fetch(request) else { return [] }
+        return trackersCoreData
     }
 }

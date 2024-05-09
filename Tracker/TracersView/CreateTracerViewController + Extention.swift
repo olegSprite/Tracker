@@ -64,9 +64,6 @@ extension CreateTrackerViewController: UITextFieldDelegate {
                 textFieldСompleted = true
             } else {
                 textFieldСompleted = false
-                if text.count > 38  {
-                    addTextAttention()
-                }
             }
         }
         enabledSaveButtonOrNot()

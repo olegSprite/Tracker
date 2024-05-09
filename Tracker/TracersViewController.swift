@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackersViewController: UIViewController, CreateTrackerViewControllerDelegate, TrackerViewCellDelegate {
+final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
     
     // MARK: - Private Properties
     
@@ -20,10 +20,13 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
     }()
     private var curentDayOfWeak: Timetable = .none
     private let trackerCategoryStore = TrackerCategoryStore.shared
+    private let trackerStore = TrackerStore.shared
     
     // MARK: - Public Properties
     
-    var categories: [TrackerCategory] = []
+    var categories: [TrackerCategory] {
+        returnCategories()
+    }
     var curentCategories = [TrackerCategory]()
     var completedTrackers: [TrackerRecord] = []
     var currentDate: Date = Date()
@@ -33,7 +36,6 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        categories = trackerCategoryStore.fetchTracerCategory()
         curentDayOfWeak = calculateDayOfWeak(date: Date())
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         setupViews()
@@ -143,6 +145,38 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
     
     // MARK: - Public Methods
     
+    func returnCategories() -> [TrackerCategory] {
+        let trackersCategoryCoreData = trackerCategoryStore.fetchTrackersCategory()
+        let trackersCoreData = trackerStore.fetchTrackers()
+        var result: [TrackerCategory] = []
+        for trackerCategoryCoreData in trackersCategoryCoreData {
+            var trackers: [Tracker] = []
+            if let heading = trackerCategoryCoreData.heading {
+                for trackerCoreData in trackersCoreData {
+                        if trackerCoreData.category == trackerCategoryCoreData {
+                            if
+                                let id = trackerCoreData.id,
+                                let name = trackerCoreData.name,
+                                let color = trackerCoreData.color,
+                                let emogi = trackerCoreData.emoji,
+                                let timetable = trackerCoreData.timetable {
+                            trackers.append(Tracker(
+                                id: id,
+                                name: name,
+                                color: color as! UIColor,
+                                emojy: emogi,
+                                timetable: timetable as! [Timetable]))
+                        }
+                    }
+                }
+                result.append(TrackerCategory(
+                    heading: heading,
+                    tracers: trackers))
+            }
+        }
+        return result
+    }
+    
     func calculateArrayOfWeak(weak: Timetable, categories: [TrackerCategory]) -> [TrackerCategory] {
         var resultArray = [TrackerCategory]()
         for category in categories {
@@ -188,32 +222,12 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
         trackersCollectionView.reloadData()
     }
     
-    func updateCategories(trackerCategory: TrackerCategory) {
-        var result: [TrackerCategory] = []
-        if categories.isEmpty {
-            result.append(trackerCategory)
-        }
-        for category in categories {
-            if category.heading != trackerCategory.heading {
-                result.append(category)
-                result.append(trackerCategory)
-            }
-            if category.heading == trackerCategory.heading {
-                let tracers = category.tracers + trackerCategory.tracers
-                let heading = category.heading
-                result.append(TrackerCategory(heading: heading, tracers: tracers))
-            }
-        }
-        categories = result
-        self.reloadCollectionAfterCreating()
-    }
-    
     // MARK: - TrackerViewCellDelegate
     
     func writeCompletedTracker(tracker: Tracker) {
         let tracerRecord = TrackerRecord(id: tracker.id, date: currentDate)
-        var oldCompletedTrackers = completedTrackers
-        var newCompletedTrackers: [TrackerRecord] = [tracerRecord]
+        let oldCompletedTrackers = completedTrackers
+        let newCompletedTrackers: [TrackerRecord] = [tracerRecord]
         completedTrackers = oldCompletedTrackers + newCompletedTrackers
     }
     
@@ -243,7 +257,7 @@ final class TrackersViewController: UIViewController, CreateTrackerViewControlle
             }
             newCategories.append(TrackerCategory(heading: category.heading, tracers: resultTrackers))
         }
-        categories = newCategories
+//        categories = newCategories
     }
     
     // MARK: - Private Actions

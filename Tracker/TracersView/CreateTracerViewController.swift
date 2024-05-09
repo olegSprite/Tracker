@@ -8,10 +8,6 @@
 import Foundation
 import UIKit
 
-protocol CreateTrackerViewControllerDelegate: AnyObject {
-    func updateCategories(trackerCategory: TrackerCategory)
-}
-
 final class CreateTrackerViewController: UIViewController, TimetableViewControllerDelegate {
     
     // MARK: - Private Properties
@@ -25,30 +21,13 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
     }()
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.frame = view.bounds
-        scrollView.contentSize = contentSize
-        return scrollView
-    }()
-    private var contentSize: CGSize {
-        CGSize(width: view.frame.width, height: 900)
-    }
-    private lazy var contentView: UIView = {
-        let contentView = UIView()
-        contentView.frame.size = contentSize
-        return contentView
-    }()
-    private lazy var attentionLable: UILabel = {
-        let attentionLable = UILabel()
-        return attentionLable
-    }()
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     private let trackerStore = TrackerStore.shared
     private let tracerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Public Properties
     
-    weak var delegate: CreateTrackerViewControllerDelegate?
     var isTracer = false
     var habitOrEventViewController: HabitOrEventViewController?
     var timetable = Set<Timetable>()
@@ -70,7 +49,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         setupVCforEvent()
         addViews()
         self.hideKeyboardWhenTappedAround()
-        tracerCategoryStore.createTracerCategory(heading: cattegory)
     }
     
     // MARK: - Public Methods
@@ -99,7 +77,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     func returnTimetableToTableView() -> String? {
         var result: String = ""
         if timetable.isEmpty { return nil }
-        // Я понимаю, что это очень плохой алгоритм, но пока не придумал как по другому отсортировать массив XD
+        if timetable.count == 7 { return "Каждый день" }
         for i in Array(timetable) {
             if i == .monday {result += "Пн, "}
         }
@@ -123,17 +101,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         }
         result.removeLast(2)
         return result
-    }
-    
-    func addTextAttention() {
-        attentionLable.text = "Ограничение 38 символов"
-        attentionLable.font = UIFont.systemFont(ofSize: 17)
-        attentionLable.textColor = .red
-        contentView.addSubview(attentionLable)
-        NSLayoutConstraint.activate([
-            attentionLable.topAnchor.constraint(equalTo: nameTracerTextField.bottomAnchor, constant: 8),
-            attentionLable.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
-        ])
     }
     
     // MARK: - Private Methods
@@ -163,6 +130,21 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     private func addScrollView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        NSLayoutConstraint.activate([
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+        ])
     }
     
     private func addNameTracerTextField() {
@@ -206,7 +188,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
             emogiAndColorCollectionView.topAnchor.constraint(equalTo: buttonsOfCattegoryOrTimetableTableView.bottomAnchor),
             emogiAndColorCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             emogiAndColorCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            emogiAndColorCollectionView.heightAnchor.constraint(equalToConstant: 800)
+            emogiAndColorCollectionView.heightAnchor.constraint(equalToConstant: 492)
         ])
     }
     
@@ -232,6 +214,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         NSLayoutConstraint.activate([
             exitButton.heightAnchor.constraint(equalToConstant: 60),
             exitButton.widthAnchor.constraint(equalToConstant: 166),
+            exitButton.topAnchor.constraint(equalTo: emogiAndColorCollectionView.bottomAnchor, constant: 40),
             exitButton.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -4),
             exitButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -34)
         ])
@@ -251,6 +234,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         NSLayoutConstraint.activate([
             saveButton.heightAnchor.constraint(equalToConstant: 60),
             saveButton.widthAnchor.constraint(equalToConstant: 166),
+            saveButton.topAnchor.constraint(equalTo: emogiAndColorCollectionView.bottomAnchor, constant: 40),
             saveButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 4),
             saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -34)
         ])
@@ -264,17 +248,14 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     }
     
     @objc private func tapSaveButton() {
+        guard let category = tracerCategoryStore.createTracerCategory(heading: cattegory) else { return }
         let resultTracer = Tracker(
             id: UUID(),
             name: nameTracerTextField.text ?? "Без текста",
             color: selectedColor ?? .black,
             emojy: selectedEmogi ?? "",
             timetable: Array(self.timetable))
-        let trackerCategory = TrackerCategory(
-            heading: cattegory,
-            tracers: [resultTracer])
-//        delegate?.updateCategories(trackerCategory: trackerCategory)
-        trackerStore.saveTracer(tracer: resultTracer, category: <#T##TrackerCategoryCoreData#>)
+        trackerStore.saveTracer(tracker: resultTracer, category: category)
         self.dismiss(animated: true)
         habitOrEventViewController?.dismiss(animated: true)
     }

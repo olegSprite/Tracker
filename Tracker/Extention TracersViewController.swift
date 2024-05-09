@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 // MARK: - CollectionViewDataSource
 
@@ -60,5 +61,9 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
                                                   verticalFittingPriority: .fittingSizeLevel)
     }
 }
+
+//extension TrackersViewController: NSFetchedResultsControllerDelegate {
+//    
+//}
 
 

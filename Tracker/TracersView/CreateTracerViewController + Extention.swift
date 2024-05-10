@@ -21,6 +21,7 @@ extension CreateTrackerViewController: UITableViewDelegate {
         } else {
             let vc = TimetableViewController()
             vc.delegate = self
+            vc.resultSetOfWeak = timetable
             let navController = UINavigationController(rootViewController: vc)
             self.present(navController, animated: true)
         }

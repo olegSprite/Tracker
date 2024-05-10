@@ -18,12 +18,12 @@ final class TimetableViewController: UIViewController {
     
     private let timetableTableView = UITableView()
     private let completeButton = UIButton()
-    private var resultSetOfWeak = Set<Timetable>()
     
     // MARK: - Public Properties
     
     weak var delegate: TimetableViewControllerDelegate?
-    var daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    var daysOfWeek: [Timetable] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+    var resultSetOfWeak = Set<Timetable>()
     
     // MARK: - Lifecycle
     

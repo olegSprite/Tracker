@@ -13,6 +13,8 @@
 		D50DEC9D2BDE499200FBBB17 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50DEC9C2BDE499100FBBB17 /* TrackerStore.swift */; };
 		D50DEC9F2BDE499D00FBBB17 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50DEC9E2BDE499D00FBBB17 /* TrackerCategoryStore.swift */; };
 		D50DECA12BDE49A600FBBB17 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50DECA02BDE49A600FBBB17 /* TrackerRecordStore.swift */; };
+		D51359C12BEDFB1700388452 /* CreateCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51359C02BEDFB1700388452 /* CreateCategoryViewController.swift */; };
+		D51359C32BEE05A900388452 /* CategoriesInCreactingViewController + Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51359C22BEE05A900388452 /* CategoriesInCreactingViewController + Extention.swift */; };
 		D589EBB42BCFB8B8009E7469 /* EmogiAndColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */; };
 		D59B5EC02BBE8A8B00FE4D67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */; };
 		D59B5EC22BBE8A8B00FE4D67 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EC12BBE8A8B00FE4D67 /* SceneDelegate.swift */; };
@@ -64,6 +66,8 @@
 		D50DEC9C2BDE499100FBBB17 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		D50DEC9E2BDE499D00FBBB17 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		D50DECA02BDE49A600FBBB17 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
+		D51359C02BEDFB1700388452 /* CreateCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCategoryViewController.swift; sourceTree = "<group>"; };
+		D51359C22BEE05A900388452 /* CategoriesInCreactingViewController + Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoriesInCreactingViewController + Extention.swift"; sourceTree = "<group>"; };
 		D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmogiAndColorCell.swift; sourceTree = "<group>"; };
 		D59B5EBC2BBE8A8B00FE4D67 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -227,6 +231,8 @@
 				D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */,
 				D5093C032BD4EFAF00772E49 /* HeaderOfEmogiOrColorView.swift */,
 				D5F7173E2BC6E90300B1B99E /* CattegoriesItCreactingViewController.swift */,
+				D51359C22BEE05A900388452 /* CategoriesInCreactingViewController + Extention.swift */,
+				D51359C02BEDFB1700388452 /* CreateCategoryViewController.swift */,
 				D5F717402BC6E9CA00B1B99E /* TimetableViewController.swift */,
 				D5A03A662BCA7E3900299B8D /* TimetableViewController + Extention.swift */,
 			);
@@ -384,9 +390,11 @@
 				D59B5EC02BBE8A8B00FE4D67 /* AppDelegate.swift in Sources */,
 				D5093C072BD56FBD00772E49 /* TrackerModel.xcdatamodeld in Sources */,
 				D59B5EF22BBE9C8600FE4D67 /* StatisticViewController.swift in Sources */,
+				D51359C32BEE05A900388452 /* CategoriesInCreactingViewController + Extention.swift in Sources */,
 				D50DECA12BDE49A600FBBB17 /* TrackerRecordStore.swift in Sources */,
 				D5B7FE002BC2E2A2006A943E /* Extention TracersViewController.swift in Sources */,
 				D59B5EC22BBE8A8B00FE4D67 /* SceneDelegate.swift in Sources */,
+				D51359C12BEDFB1700388452 /* CreateCategoryViewController.swift in Sources */,
 				D5F717412BC6E9CA00B1B99E /* TimetableViewController.swift in Sources */,
 				D5B7FDFC2BC188EF006A943E /* TrackerCategory.swift in Sources */,
 			);

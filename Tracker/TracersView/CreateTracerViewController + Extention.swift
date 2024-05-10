@@ -14,7 +14,8 @@ extension CreateTrackerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let vc = CategoriesItCreactingViewController()
+            let vc = CategoriesInCreactingViewController()
+            vc.createTrackerViewController = self
             let navController = UINavigationController(rootViewController: vc)
             self.present(navController, animated: true)
         } else {
@@ -42,7 +43,7 @@ extension CreateTrackerViewController: UITableViewDataSource {
         let text = indexPath.row == 0 ? "Категория" : "Расписание"
         cell.textLabel?.text = text
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
-        let subText = indexPath.row == 0 ? nil : returnTimetableToTableView()
+        let subText = indexPath.row == 0 ? returnCategoryToTableView() : returnTimetableToTableView()
         cell.detailTextLabel?.text = subText
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.detailTextLabel?.textColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
@@ -58,8 +59,8 @@ extension CreateTrackerViewController: UITableViewDataSource {
 // MARK: - TextFieldDelegate
 
 extension CreateTrackerViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text, !text.isEmpty {
+    func textFieldDidChangeSelection(_ textField: UITextField)  {
+        if let text = textField.text {
             if text.count >= 1 && text.count <= 38 {
                 textFieldСompleted = true
             } else {
@@ -67,7 +68,6 @@ extension CreateTrackerViewController: UITextFieldDelegate {
             }
         }
         enabledSaveButtonOrNot()
-        return true
     }
 }
 

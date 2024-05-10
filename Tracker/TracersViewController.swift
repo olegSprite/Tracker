@@ -13,20 +13,18 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
     
     private let plugImageView = UIImageView()
     private let plugLable = UILabel()
-    private var trackersCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        return collectionView
-    }()
     private var curentDayOfWeak: Timetable = .none
     private let trackerCategoryStore = TrackerCategoryStore.shared
     private let trackerStore = TrackerStore.shared
     
     // MARK: - Public Properties
     
-    var categories: [TrackerCategory] {
-        returnCategories()
-    }
+    var categories = [TrackerCategory]()
+    var trackersCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
     var curentCategories = [TrackerCategory]()
     var completedTrackers: [TrackerRecord] = []
     var currentDate: Date = Date()
@@ -37,8 +35,10 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         curentDayOfWeak = calculateDayOfWeak(date: Date())
+        categories = returnCategories()
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         setupViews()
+        trackerStore.delegate = self
     }
     
     // MARK: - Private Methods
@@ -146,8 +146,8 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
     // MARK: - Public Methods
     
     func returnCategories() -> [TrackerCategory] {
-        let trackersCategoryCoreData = trackerCategoryStore.fetchTrackersCategory()
-        let trackersCoreData = trackerStore.fetchTrackers()
+        let trackersCategoryCoreData = trackerCategoryStore.trackersCategoryCoreData
+        let trackersCoreData = trackerStore.trackersCoreData
         var result: [TrackerCategory] = []
         for trackerCategoryCoreData in trackersCategoryCoreData {
             var trackers: [Tracker] = []
@@ -217,6 +217,7 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
     }
     
     func reloadCollectionAfterCreating() {
+        categories = returnCategories()
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         showPlugOrTracers()
         trackersCollectionView.reloadData()

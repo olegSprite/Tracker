@@ -13,7 +13,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     // MARK: - Private Properties
 
     private let nameTracerTextField = CustomTextField()
-    private let buttonsOfCattegoryOrTimetableTableView = UITableView()
     private let exitButton = UIButton()
     private let saveButton = UIButton()
     private var emogiAndColorCollectionView: UICollectionView = {
@@ -28,10 +27,12 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
 
     // MARK: - Public Properties
     
+    let buttonsOfCattegoryOrTimetableTableView = UITableView()
     var isTracer = false
     var habitOrEventViewController: HabitOrEventViewController?
     var timetable = Set<Timetable>()
-    var cattegory: String = "Без категории"
+    var cattegory: String?
+    var categoryCoreData: TrackerCategoryCoreData?
     var selectedEmogi: String?
     var selectedEmogiCell: EmogiAndColorCell?
     var selectedColor: UIColor?
@@ -65,7 +66,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     }
     
     func enabledSaveButtonOrNot() {
-        if textFieldСompleted && timetableСompleted && selectedColor != nil && selectedEmogi != nil {
+        if textFieldСompleted && timetableСompleted && selectedColor != nil && selectedEmogi != nil && cattegory != nil {
             saveButton.isEnabled = true
             saveButton.backgroundColor = .black
         } else {
@@ -101,6 +102,10 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         }
         result.removeLast(2)
         return result
+    }
+    
+    func returnCategoryToTableView() -> String? {
+        return cattegory
     }
     
     // MARK: - Private Methods
@@ -248,7 +253,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     }
     
     @objc private func tapSaveButton() {
-        guard let category = tracerCategoryStore.createTracerCategory(heading: cattegory) else { return }
+        guard let category = categoryCoreData else { return }
         let resultTracer = Tracker(
             id: UUID(),
             name: nameTracerTextField.text ?? "Без текста",

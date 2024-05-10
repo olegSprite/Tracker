@@ -14,10 +14,10 @@ extension CreateTrackerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let vc = CategoriesInCreactingViewController()
-            vc.createTrackerViewController = self
-            let navController = UINavigationController(rootViewController: vc)
-            self.present(navController, animated: true)
+//            let vc = CategoriesInCreactingViewController()
+//            vc.createTrackerViewController = self
+//            let navController = UINavigationController(rootViewController: vc)
+//            self.present(navController, animated: true)
         } else {
             let vc = TimetableViewController()
             vc.delegate = self

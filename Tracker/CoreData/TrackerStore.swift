@@ -16,11 +16,9 @@ final class TrackerStore: NSObject {
     
     static let shared = TrackerStore()
     private override init() {}
-    private var appDelegate: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
-    }
+    private var persistentContainerCreator = PersistentContainerCreator.shared
     private var context: NSManagedObjectContext {
-        appDelegate.persistentContainer.viewContext
+        persistentContainerCreator.persistentContainer.viewContext
     }
     var trackersCoreData: [TrackerCoreData] {
         guard let objects = self.fetchedResultsController.fetchedObjects else { return []}
@@ -54,7 +52,7 @@ final class TrackerStore: NSObject {
         tracerEntity.name = tracker.name
         tracerEntity.timetable = tracker.timetable as NSObject
         category.addToTrackers(tracerEntity)
-        appDelegate.saveContext()
+        persistentContainerCreator.saveContext()
     }
     
     // MARK: - Read

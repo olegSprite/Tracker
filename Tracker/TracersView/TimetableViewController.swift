@@ -47,13 +47,15 @@ final class TimetableViewController: UIViewController {
         timetableTableView.delegate = self
         timetableTableView.layer.masksToBounds = true
         timetableTableView.layer.cornerRadius = 16
+        timetableTableView.isScrollEnabled = false
+        timetableTableView.tableHeaderView = UIView()
         view.addSubview(timetableTableView)
         timetableTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             timetableTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             timetableTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             timetableTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            timetableTableView.heightAnchor.constraint(equalToConstant: 525)
+            timetableTableView.heightAnchor.constraint(equalToConstant: 525 - 1)
         ])
     }
     

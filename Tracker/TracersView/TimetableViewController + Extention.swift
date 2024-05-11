@@ -17,7 +17,7 @@ extension TimetableViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.textLabel?.text = daysOfWeek[indexPath.row].rawValue
         cell.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
         let switchView = UISwitch()
@@ -30,6 +30,8 @@ extension TimetableViewController: UITableViewDataSource {
             }
         }
         cell.accessoryView = switchView
+        cell.selectionStyle = .none
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     

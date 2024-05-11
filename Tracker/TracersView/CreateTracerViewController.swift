@@ -178,13 +178,14 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         buttonsOfCattegoryOrTimetableTableView.delegate = self
         buttonsOfCattegoryOrTimetableTableView.layer.masksToBounds = true
         buttonsOfCattegoryOrTimetableTableView.layer.cornerRadius = 16
+        buttonsOfCattegoryOrTimetableTableView.isScrollEnabled = false
         contentView.addSubview(buttonsOfCattegoryOrTimetableTableView)
         buttonsOfCattegoryOrTimetableTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             buttonsOfCattegoryOrTimetableTableView.topAnchor.constraint(equalTo: nameTracerTextField.bottomAnchor, constant: 24),
             buttonsOfCattegoryOrTimetableTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             buttonsOfCattegoryOrTimetableTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            buttonsOfCattegoryOrTimetableTableView.heightAnchor.constraint(equalToConstant: isTracer ? 150 : 75)
+            buttonsOfCattegoryOrTimetableTableView.heightAnchor.constraint(equalToConstant: isTracer ? 150 - 1 : 75 - 1)
         ])
     }
     

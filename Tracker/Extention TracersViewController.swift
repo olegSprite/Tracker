@@ -61,4 +61,10 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+extension TrackersViewController: TrackerStoreDelegate {
+    func updateCollection() {
+        reloadCollectionAfterCreating()
+    }
+}
+
 

@@ -18,12 +18,12 @@ final class TimetableViewController: UIViewController {
     
     private let timetableTableView = UITableView()
     private let completeButton = UIButton()
-    private var resultSetOfWeak = Set<Timetable>()
     
     // MARK: - Public Properties
     
     weak var delegate: TimetableViewControllerDelegate?
-    var daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    var daysOfWeek: [Timetable] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+    var resultSetOfWeak = Set<Timetable>()
     
     // MARK: - Lifecycle
     
@@ -47,13 +47,15 @@ final class TimetableViewController: UIViewController {
         timetableTableView.delegate = self
         timetableTableView.layer.masksToBounds = true
         timetableTableView.layer.cornerRadius = 16
+        timetableTableView.isScrollEnabled = false
+        timetableTableView.tableHeaderView = UIView()
         view.addSubview(timetableTableView)
         timetableTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             timetableTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             timetableTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             timetableTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            timetableTableView.heightAnchor.constraint(equalToConstant: 525)
+            timetableTableView.heightAnchor.constraint(equalToConstant: 525 - 1)
         ])
     }
     

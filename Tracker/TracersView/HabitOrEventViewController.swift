@@ -72,7 +72,6 @@ final class HabitOrEventViewController: UIViewController {
         let vc = CreateTrackerViewController()
         vc.isTracer = isTracer 
         vc.habitOrEventViewController = self
-        vc.delegate = originalViewController
         let navBar = UINavigationController(rootViewController: vc)
         navBar.modalPresentationStyle = .popover
         self.present(navBar, animated: true)

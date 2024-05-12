@@ -121,7 +121,7 @@ extension CreateTrackerViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let titile = indexPath.section == 0 ? "Emogi" : "Цвет"
+        let titile = indexPath.section == 0 ? "Emoji" : "Цвет"
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? HeaderOfEmogiOrColorView else { return UICollectionReusableView()}
         view.titleLabel.text = titile
         return view

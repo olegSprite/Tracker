@@ -31,7 +31,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     var isTracer = false
     var habitOrEventViewController: HabitOrEventViewController?
     var timetable = Set<Timetable>()
-    var cattegory: String? = "Без категории"
+    var cattegory: String?
     var categoryCoreData: TrackerCategoryCoreData?
     var selectedEmogi: String?
     var selectedEmogiCell: EmogiAndColorCell?
@@ -50,9 +50,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         setupVCforEvent()
         addViews()
         self.hideKeyboardWhenTappedAround()
-        
-        // - временное создание категории без раздела
-        trackerCategoryStore.createTracerCategory(heading: cattegory ?? "")
     }
     
     // MARK: - Public Methods
@@ -257,8 +254,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     }
     
     @objc private func tapSaveButton() {
-        categoryCoreData = trackerCategoryStore.trackersCategoryCoreData.first
-        // временно берем первую категорию, которая заранее уже создали
         guard let category = categoryCoreData else { return }
         let resultTracer = Tracker(
             id: UUID(),

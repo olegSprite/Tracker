@@ -138,6 +138,25 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		D5135A052BF0E49100388452 /* CategoryVC */ = {
+			isa = PBXGroup;
+			children = (
+				D5F7173E2BC6E90300B1B99E /* CattegoriesItCreactingViewController.swift */,
+				D51359C22BEE05A900388452 /* CategoriesInCreactingViewController + Extention.swift */,
+				D51359C02BEDFB1700388452 /* CreateCategoryViewController.swift */,
+			);
+			name = CategoryVC;
+			sourceTree = "<group>";
+		};
+		D5135A062BF0E4A700388452 /* TimetableVC */ = {
+			isa = PBXGroup;
+			children = (
+				D5F717402BC6E9CA00B1B99E /* TimetableViewController.swift */,
+				D5A03A662BCA7E3900299B8D /* TimetableViewController + Extention.swift */,
+			);
+			name = TimetableVC;
+			sourceTree = "<group>";
+		};
 		D59B5EB32BBE8A8B00FE4D67 = {
 			isa = PBXGroup;
 			children = (
@@ -233,11 +252,8 @@
 				D5F7173A2BC666C000B1B99E /* CreateTracerViewController + Extention.swift */,
 				D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */,
 				D5093C032BD4EFAF00772E49 /* HeaderOfEmogiOrColorView.swift */,
-				D5F7173E2BC6E90300B1B99E /* CattegoriesItCreactingViewController.swift */,
-				D51359C22BEE05A900388452 /* CategoriesInCreactingViewController + Extention.swift */,
-				D51359C02BEDFB1700388452 /* CreateCategoryViewController.swift */,
-				D5F717402BC6E9CA00B1B99E /* TimetableViewController.swift */,
-				D5A03A662BCA7E3900299B8D /* TimetableViewController + Extention.swift */,
+				D5135A062BF0E4A700388452 /* TimetableVC */,
+				D5135A052BF0E49100388452 /* CategoryVC */,
 			);
 			name = CreatingTracerView;
 			sourceTree = "<group>";

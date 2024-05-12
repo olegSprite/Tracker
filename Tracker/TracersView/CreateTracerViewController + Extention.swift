@@ -14,10 +14,10 @@ extension CreateTrackerViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-//            let vc = CategoriesInCreactingViewController()
-//            vc.createTrackerViewController = self
-//            let navController = UINavigationController(rootViewController: vc)
-//            self.present(navController, animated: true)
+            let vc = CategoriesInCreactingViewController()
+            vc.createTrackerViewController = self
+            let navController = UINavigationController(rootViewController: vc)
+            self.present(navController, animated: true)
         } else {
             let vc = TimetableViewController()
             vc.delegate = self
@@ -145,7 +145,7 @@ extension CreateTrackerViewController: UICollectionViewDelegateFlowLayout {
         return 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize { // 1
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width / 6, height: 48)
     }
 }

@@ -10,9 +10,16 @@ import UIKit
 
 final class PageViewController: UIPageViewController {
     
-    let pageControl = UIPageControl()
+    // MARK: - Private Properties
+    
     private let closeButton = UIButton()
+    
+    // MARK: - Public Properties
+    
+    let pageControl = UIPageControl()
     var pages = [UIViewController]()
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +27,8 @@ final class PageViewController: UIPageViewController {
         addCloseButton()
         setupPageControl()
     }
+    
+    // MARK: - Private Methods
     
     private func setupPageViewController() {
         dataSource = self
@@ -66,6 +75,8 @@ final class PageViewController: UIPageViewController {
         ])
     }
     
+    // MARK: - Private Actions
+    
     @objc private func closeButtonTap() {
         UserDefaults.standard.set("onboardingIsCompleted", forKey: "onboardingIsCompleted")
         let TabBarVC = TabBarViewController()
@@ -73,3 +84,5 @@ final class PageViewController: UIPageViewController {
         present(TabBarVC, animated: true)
     }
 }
+
+

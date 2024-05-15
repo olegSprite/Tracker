@@ -10,9 +10,13 @@ import UIKit
 
 final class OnboardingScreenViewController: UIViewController {
     
+    // MARK: - Private Properties
+    
     private let imageView = UIImageView()
     private let lableView = UILabel()
     private var numberOfScreen: Int?
+    
+    // MARK: - Init
     
     init(image: UIImage, numberOfScreen: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -24,11 +28,15 @@ final class OnboardingScreenViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addImage()
         addLable()
     }
+    
+    // MARK: - Private Methods
     
     private func addImage() {
         view.addSubview(imageView)

@@ -94,7 +94,7 @@ final class CreateCategoryViewController: UIViewController, UITextFieldDelegate 
     
     @objc private func createCategoryButtonTap() {
         saveCategory()
-        categoriesInCreactingViewController?.plugOrCategories()
+//        categoriesInCreactingViewController?.plugOrCategories()
         self.dismiss(animated: true)
     }
 }

@@ -258,7 +258,6 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
             }
             newCategories.append(TrackerCategory(heading: category.heading, tracers: resultTrackers))
         }
-//        categories = newCategories
     }
     
     // MARK: - Private Actions

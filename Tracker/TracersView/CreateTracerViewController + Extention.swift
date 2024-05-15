@@ -15,7 +15,12 @@ extension CreateTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             let vc = CategoriesInCreactingViewController()
-            vc.createTrackerViewController = self
+            let categoryViewModel = CategoryViewModel()
+            vc.initialize(viewModel: categoryViewModel)
+            categoryViewModel.createTrackerViewController = self
+            if let categoryCoreData = categoryCoreData {
+                categoryViewModel.curentCategory?(categoryCoreData)
+            }
             let navController = UINavigationController(rootViewController: vc)
             self.present(navController, animated: true)
         } else {

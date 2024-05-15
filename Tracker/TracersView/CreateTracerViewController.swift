@@ -31,7 +31,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     var isTracer = false
     var habitOrEventViewController: HabitOrEventViewController?
     var timetable = Set<Timetable>()
-    var cattegory: String?
     var categoryCoreData: TrackerCategoryCoreData?
     var selectedEmogi: String?
     var selectedEmogiCell: EmogiAndColorCell?
@@ -66,7 +65,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     }
     
     func enabledSaveButtonOrNot() {
-        if textFieldСompleted && timetableСompleted && selectedColor != nil && selectedEmogi != nil && cattegory != nil {
+        if textFieldСompleted && timetableСompleted && selectedColor != nil && selectedEmogi != nil && categoryCoreData != nil {
             saveButton.isEnabled = true
             saveButton.backgroundColor = .black
         } else {
@@ -105,7 +104,7 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
     }
     
     func returnCategoryToTableView() -> String? {
-        return cattegory
+        return categoryCoreData?.heading
     }
     
     // MARK: - Private Methods

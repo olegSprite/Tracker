@@ -149,7 +149,7 @@
 		D5135A052BF0E49100388452 /* CategoryVC */ = {
 			isa = PBXGroup;
 			children = (
-				D5493EDB2BF34BFC0032ED80 /* MVVM */,
+				D5493EDB2BF34BFC0032ED80 /* MVVM CategoryInCreating */,
 				D51359C02BEDFB1700388452 /* CreateCategoryViewController.swift */,
 			);
 			name = CategoryVC;
@@ -174,14 +174,14 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		D5493EDB2BF34BFC0032ED80 /* MVVM */ = {
+		D5493EDB2BF34BFC0032ED80 /* MVVM CategoryInCreating */ = {
 			isa = PBXGroup;
 			children = (
 				D5493EDC2BF34C2C0032ED80 /* CategoryViewModel.swift */,
 				D5F7173E2BC6E90300B1B99E /* CattegoriesInCreactingViewController.swift */,
 				D51359C22BEE05A900388452 /* CategoriesInCreactingViewController + Extention.swift */,
 			);
-			name = MVVM;
+			name = "MVVM CategoryInCreating";
 			sourceTree = "<group>";
 		};
 		D59B5EB32BBE8A8B00FE4D67 = {

@@ -10,11 +10,18 @@ import UIKit
 
 final class CreateCategoryViewController: UIViewController, UITextFieldDelegate {
     
+    // MARK: - Private Properties
+    
     private let nameCategoryTextField = CustomTextField()
     private let createCategoryButton = UIButton()
     private var textFieldСompleted = false
     private let trackerCategoryStore = TrackerCategoryStore.shared
+    
+    // MARK: - Public Properties
+    
     var categoriesInCreactingViewController: CategoriesInCreactingViewController?
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +29,10 @@ final class CreateCategoryViewController: UIViewController, UITextFieldDelegate 
         setupNavBar()
         addNameTracerTextField()
         addCreateCategoryButton()
+        self.hideKeyboardWhenTappedAround()
     }
+    
+    // MARK: - Private Methods
     
     private func setupNavBar() {
         title = "Новая категория"
@@ -78,8 +88,10 @@ final class CreateCategoryViewController: UIViewController, UITextFieldDelegate 
     }
     
     private func saveCategory() {
-        trackerCategoryStore.createTracerCategory(heading: nameCategoryTextField.text ?? "")
+        let _ = trackerCategoryStore.createTracerCategory(heading: nameCategoryTextField.text ?? "")
     }
+    
+    // MARK: - Public Methods
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         if let text = textField.text {
@@ -92,9 +104,10 @@ final class CreateCategoryViewController: UIViewController, UITextFieldDelegate 
         enabledSaveButtonOrNot()
     }
     
+    // MARK: - Private Actions
+    
     @objc private func createCategoryButtonTap() {
         saveCategory()
-//        categoriesInCreactingViewController?.plugOrCategories()
         self.dismiss(animated: true)
     }
 }

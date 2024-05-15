@@ -35,9 +35,9 @@ extension CategoriesInCreactingViewController: UITableViewDataSource {
         cell.textLabel?.text = text
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.selectionStyle = .none
-        let mark = UIImageView()
-        mark.image = UIImage(systemName: "checkmark")
-        cell.accessoryView = mark
+        if categories[indexPath.row] == curentCategory {
+            cell.accessoryType = .checkmark
+        }
         return cell
     }
     

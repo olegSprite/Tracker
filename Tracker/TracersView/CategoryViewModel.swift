@@ -11,10 +11,17 @@ typealias Binding<T> = (T) -> Void
 
 final class CategoryViewModel {
     
+    // MARK: - Private Properties
+    
+    private let trackerCategoryStore = TrackerCategoryStore.shared
+    
+    // MARK: - Public Properties
+    
     var curentCategory: Binding<TrackerCategoryCoreData>?
     var categoryes: Binding<[TrackerCategoryCoreData]>?
-    private let trackerCategoryStore = TrackerCategoryStore.shared
     var createTrackerViewController: CreateTrackerViewController?
+    
+    // MARK: - Public Methods
     
     func fetchTrackerCategory() {
         self.categoryes?(trackerCategoryStore.trackersCategoryCoreData)
@@ -27,6 +34,8 @@ final class CategoryViewModel {
         createTrackerViewController?.enabledSaveButtonOrNot()
     }
 }
+
+// MARK: - TrackerCategoryStoreDelegate
 
 extension CategoryViewModel: TrackerCategoryStoreDelegate {
     func updateCategorys() {

@@ -14,7 +14,7 @@ extension CategoriesInCreactingViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let viewModel = viewModel else { return }
-        viewModel.saveCategoryAndReturnToScreen(category: categories[indexPath.row])
+        viewModel.changeCategory(category: categories[indexPath.row])
         self.dismiss(animated: true)
     }
 }

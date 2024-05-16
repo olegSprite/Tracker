@@ -17,10 +17,10 @@ extension CreateTrackerViewController: UITableViewDelegate {
             let vc = CategoriesInCreactingViewController()
             let categoryViewModel = CategoryViewModel()
             vc.initialize(viewModel: categoryViewModel)
-            categoryViewModel.createTrackerViewController = self
             if let categoryCoreData = categoryCoreData {
                 categoryViewModel.curentCategory?(categoryCoreData)
             }
+            self.bind(viewModel: categoryViewModel)
             let navController = UINavigationController(rootViewController: vc)
             self.present(navController, animated: true)
         } else {

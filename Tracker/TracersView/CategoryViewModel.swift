@@ -19,7 +19,6 @@ final class CategoryViewModel {
     
     var curentCategory: Binding<TrackerCategoryCoreData>?
     var categoryes: Binding<[TrackerCategoryCoreData]>?
-    var createTrackerViewController: CreateTrackerViewController?
     
     // MARK: - Public Methods
     
@@ -28,10 +27,8 @@ final class CategoryViewModel {
         self.trackerCategoryStore.delegate = self
     }
     
-    func saveCategoryAndReturnToScreen(category: TrackerCategoryCoreData) {
-        createTrackerViewController?.categoryCoreData = category
-        createTrackerViewController?.buttonsOfCattegoryOrTimetableTableView.reloadData()
-        createTrackerViewController?.enabledSaveButtonOrNot()
+    func changeCategory(category: TrackerCategoryCoreData) {
+        curentCategory?(category)
     }
 }
 

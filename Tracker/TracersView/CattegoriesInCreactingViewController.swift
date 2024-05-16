@@ -81,8 +81,6 @@ final class CategoriesInCreactingViewController: UIViewController {
         categoriesTableView.reloadData()
     }
     
-    // MARK: - Public Methods
-    
     // MARK: - Private Methods
     
     private func setupNavBar() {

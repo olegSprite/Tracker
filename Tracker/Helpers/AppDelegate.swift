@@ -11,14 +11,6 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        var window: UIWindow?
-        window = UIWindow()
-        if UserDefaults.standard.string(forKey: "onboardingIsCompleted") != nil {
-            window?.rootViewController = TabBarViewController()
-        } else {
-            window?.rootViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-        }
-        window?.makeKeyAndVisible()
         DaysValueTransformer.register()
         return true
     }

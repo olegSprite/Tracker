@@ -11,10 +11,6 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        var window: UIWindow?
-        window = UIWindow()
-        window?.rootViewController = TabBarViewController()
-        window?.makeKeyAndVisible()
         DaysValueTransformer.register()
         return true
     }

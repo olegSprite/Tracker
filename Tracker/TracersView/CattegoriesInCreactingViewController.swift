@@ -10,31 +10,55 @@ import UIKit
 
 final class CategoriesInCreactingViewController: UIViewController {
     
+    // MARK: - Public Properties
+    
     var categories: [TrackerCategoryCoreData] = []
+    var curentCategory: TrackerCategoryCoreData?
+    var viewModel: CategoryViewModel?
+    
+    // MARK: - Private Properties
+    
     private let plugImageView = UIImageView()
     private let plugLable = UILabel()
     private let createCategoryButton = UIButton()
     private let categoriesTableView = UITableView()
-    private let trackerCategoryStore = TrackerCategoryStore.shared
     private var heightCategoriesTableViewConstraint: NSLayoutConstraint?
-    var createTrackerViewController: CreateTrackerViewController? 
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        categories = trackerCategoryStore.trackersCategoryCoreData
         setupNavBar()
-        plugOrCategories()
-        trackerCategoryStore.delegate = self
         addCreateCategoryButton()
     }
     
-    // MARK: - Public Methods
+    // MARK: - MVVM
     
-    func plugOrCategories() {
-        if categories.isEmpty {
+    func initialize(viewModel: CategoryViewModel) {
+        self.viewModel = viewModel
+        bind()
+    }
+    
+    private func bind() {
+        guard let viewModel = viewModel else { return }
+        viewModel.categoryes = { [weak self] category in
+            if category.count == 0 {
+                self?.setPlug(enebled: true)
+            } else {
+                self?.setPlug(enebled: false)
+                self?.setCategoryes(categories: category)
+            }
+        }
+        viewModel.curentCategory = { [weak self] curentCategory in
+            self?.curentCategory = curentCategory
+        }
+    
+        viewModel.fetchTrackerCategory()
+    }
+    
+    private func setPlug(enebled: Bool) {
+        if enebled {
             categoriesTableView.removeFromSuperview()
             addPlugImage()
             addPlugLable()
@@ -43,6 +67,18 @@ final class CategoriesInCreactingViewController: UIViewController {
             plugImageView.removeFromSuperview()
             addCategoriesTableView()
         }
+    }
+    
+    private func setCategoryes(categories: [TrackerCategoryCoreData]) {
+        self.categories = categories
+        updateCategorys()
+    }
+    
+    func updateCategorys() {
+        heightCategoriesTableViewConstraint?.isActive = false
+        heightCategoriesTableViewConstraint = categoriesTableView.heightAnchor.constraint(equalToConstant: CGFloat(75 * categories.count) - 1)
+        heightCategoriesTableViewConstraint?.isActive = true
+        categoriesTableView.reloadData()
     }
     
     // MARK: - Private Methods
@@ -83,10 +119,9 @@ final class CategoriesInCreactingViewController: UIViewController {
         categoriesTableView.dataSource = self
         categoriesTableView.layer.masksToBounds = true
         categoriesTableView.layer.cornerRadius = 16
+        categoriesTableView.isScrollEnabled = false
         categoriesTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(categoriesTableView)
-        heightCategoriesTableViewConstraint = categoriesTableView.heightAnchor.constraint(equalToConstant: CGFloat(75 * categories.count))
-        heightCategoriesTableViewConstraint?.isActive = true
         NSLayoutConstraint.activate([
             categoriesTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             categoriesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -113,20 +148,12 @@ final class CategoriesInCreactingViewController: UIViewController {
         ])
     }
     
+    // MARK: - Action
+    
     @objc private func createCategoryButtonTap() {
         let vc = CreateCategoryViewController()
         vc.categoriesInCreactingViewController = self
         let navController = UINavigationController(rootViewController: vc)
         self.present(navController, animated: true)
-    }
-}
-
-extension CategoriesInCreactingViewController: TrackerCategoryStoreDelegate {
-    func updateCategorys() {
-        categories = trackerCategoryStore.trackersCategoryCoreData
-        heightCategoriesTableViewConstraint?.isActive = false
-        heightCategoriesTableViewConstraint = categoriesTableView.heightAnchor.constraint(equalToConstant: CGFloat(75 * categories.count))
-        heightCategoriesTableViewConstraint?.isActive = true
-        categoriesTableView.reloadData()
     }
 }

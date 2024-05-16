@@ -8,16 +8,18 @@
 import Foundation
 import UIKit
 
+// MARK: - UITableViewDelegate
+
 extension CategoriesInCreactingViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        createTrackerViewController?.cattegory = categories[indexPath.row].heading ?? ""
-        createTrackerViewController?.categoryCoreData = categories[indexPath.row]
-        createTrackerViewController?.buttonsOfCattegoryOrTimetableTableView.reloadData()
-        createTrackerViewController?.enabledSaveButtonOrNot()
+        guard let viewModel = viewModel else { return }
+        viewModel.changeCategory(category: categories[indexPath.row])
         self.dismiss(animated: true)
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension CategoriesInCreactingViewController: UITableViewDataSource {
     
@@ -33,6 +35,9 @@ extension CategoriesInCreactingViewController: UITableViewDataSource {
         cell.textLabel?.text = text
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.selectionStyle = .none
+        if categories[indexPath.row] == curentCategory {
+            cell.accessoryType = .checkmark
+        }
         return cell
     }
     

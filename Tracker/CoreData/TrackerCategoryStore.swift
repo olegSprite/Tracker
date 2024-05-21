@@ -11,6 +11,7 @@ import CoreData
 protocol TrackerCategoryStoreDelegate: AnyObject {
     func updateCategorys()
 }
+
 final class TrackerCategoryStore: NSObject {
     
     static let shared = TrackerCategoryStore()

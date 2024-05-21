@@ -8,26 +8,26 @@
 import Foundation
 import UIKit
 
-final class CreateTrackerViewController: UIViewController, TimetableViewControllerDelegate {
+class CreateTrackerViewController: UIViewController, TimetableViewControllerDelegate {
     
     // MARK: - Private Properties
 
-    private let nameTracerTextField = CustomTextField()
     private let exitButton = UIButton()
-    private let saveButton = UIButton()
     private var emogiAndColorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
     }()
     private let scrollView = UIScrollView()
-    private let contentView = UIView()
     private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Public Properties
     
+    let contentView = UIView()
+    let nameTracerTextField = CustomTextField()
     let buttonsOfCattegoryOrTimetableTableView = UITableView()
+    let saveButton = UIButton()
     var isTracer = false
     var habitOrEventViewController: HabitOrEventViewController?
     var timetable = Set<Timetable>()
@@ -116,21 +116,12 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         return categoryCoreData?.heading
     }
     
-    // MARK: - Private Methods
-    
-    private func setupNavBar() {
+    func setupNavBar() {
         title = isTracer ? "Новая привычка" : "Новое нерегулярное событие"
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
-    private func setupVCforEvent() {
-        if !isTracer {
-            timetable.insert(.none)
-            timetableСompleted = true
-        }
-    }
-    
-    private func addViews() {
+    func addViews() {
         view.backgroundColor = .white
         addScrollView()
         addNameTracerTextField()
@@ -138,6 +129,53 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         addEmogiAndColorCollectionView()
         addExitButton()
         addSaveButton()
+    }
+    
+    func addNameTracerTextField() {
+        nameTracerTextField.delegate = self
+        nameTracerTextField.placeholder = "Введите название трекера"
+        nameTracerTextField.clearButtonMode = .whileEditing
+        nameTracerTextField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
+        nameTracerTextField.layer.masksToBounds = true
+        nameTracerTextField.layer.cornerRadius = 16
+        nameTracerTextField.setLeftPaddingPoints(16)
+        contentView.addSubview(nameTracerTextField)
+        nameTracerTextField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            nameTracerTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameTracerTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            nameTracerTextField.heightAnchor.constraint(equalToConstant: 75),
+            nameTracerTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24)
+        ])
+    }
+    
+    func addSaveButton() {
+        saveButton.setTitle("Создать", for: .normal)
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
+        saveButton.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)
+        saveButton.isEnabled = false
+        saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        saveButton.layer.masksToBounds = true
+        saveButton.layer.cornerRadius = 16
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(saveButton)
+        NSLayoutConstraint.activate([
+            saveButton.heightAnchor.constraint(equalToConstant: 60),
+            saveButton.widthAnchor.constraint(equalToConstant: 166),
+            saveButton.topAnchor.constraint(equalTo: emogiAndColorCollectionView.bottomAnchor, constant: 40),
+            saveButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 4),
+            saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -34)
+        ])
+    }
+    
+    // MARK: - Private Methods
+    
+    private func setupVCforEvent() {
+        if !isTracer {
+            timetable.insert(.none)
+            timetableСompleted = true
+        }
     }
     
     private func addScrollView() {
@@ -157,24 +195,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
-        ])
-    }
-    
-    private func addNameTracerTextField() {
-        nameTracerTextField.delegate = self
-        nameTracerTextField.placeholder = "Введите название трекера"
-        nameTracerTextField.clearButtonMode = .whileEditing
-        nameTracerTextField.backgroundColor = UIColor(red: 230/255, green: 232/255, blue: 235/255, alpha: 0.3)
-        nameTracerTextField.layer.masksToBounds = true
-        nameTracerTextField.layer.cornerRadius = 16
-        nameTracerTextField.setLeftPaddingPoints(16)
-        contentView.addSubview(nameTracerTextField)
-        nameTracerTextField.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            nameTracerTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameTracerTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            nameTracerTextField.heightAnchor.constraint(equalToConstant: 75),
-            nameTracerTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24)
         ])
     }
     
@@ -234,26 +254,6 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         ])
     }
     
-    private func addSaveButton() {
-        saveButton.setTitle("Создать", for: .normal)
-        saveButton.setTitleColor(.white, for: .normal)
-        saveButton.backgroundColor = UIColor(red: 174/255, green: 175/255, blue: 180/255, alpha: 1)
-        saveButton.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)
-        saveButton.isEnabled = false
-        saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        saveButton.layer.masksToBounds = true
-        saveButton.layer.cornerRadius = 16
-        saveButton.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(saveButton)
-        NSLayoutConstraint.activate([
-            saveButton.heightAnchor.constraint(equalToConstant: 60),
-            saveButton.widthAnchor.constraint(equalToConstant: 166),
-            saveButton.topAnchor.constraint(equalTo: emogiAndColorCollectionView.bottomAnchor, constant: 40),
-            saveButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 4),
-            saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -34)
-        ])
-    }
-    
     // MARK: - Private Actions
     
     @objc private func tapExitButton() {
@@ -261,7 +261,9 @@ final class CreateTrackerViewController: UIViewController, TimetableViewControll
         habitOrEventViewController?.dismiss(animated: true)
     }
     
-    @objc private func tapSaveButton() {
+    // MARK: - Public Action
+    
+    @objc func tapSaveButton() {
         guard let category = categoryCoreData else { return }
         let resultTracer = Tracker(
             id: UUID(),

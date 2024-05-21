@@ -45,6 +45,7 @@
 		D5F7173B2BC666C000B1B99E /* CreateTracerViewController + Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7173A2BC666C000B1B99E /* CreateTracerViewController + Extention.swift */; };
 		D5F7173F2BC6E90300B1B99E /* CattegoriesInCreactingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7173E2BC6E90300B1B99E /* CattegoriesInCreactingViewController.swift */; };
 		D5F717412BC6E9CA00B1B99E /* TimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F717402BC6E9CA00B1B99E /* TimetableViewController.swift */; };
+		D5F95C592BFC77FF00241BB2 /* EditingTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F95C582BFC77FF00241BB2 /* EditingTrackerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +108,7 @@
 		D5F7173A2BC666C000B1B99E /* CreateTracerViewController + Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateTracerViewController + Extention.swift"; sourceTree = "<group>"; };
 		D5F7173E2BC6E90300B1B99E /* CattegoriesInCreactingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CattegoriesInCreactingViewController.swift; sourceTree = "<group>"; };
 		D5F717402BC6E9CA00B1B99E /* TimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewController.swift; sourceTree = "<group>"; };
+		D5F95C582BFC77FF00241BB2 /* EditingTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTrackerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +270,7 @@
 				D5B7FDFF2BC2E2A2006A943E /* Extention TracersViewController.swift */,
 				D5B7FE012BC2E4B7006A943E /* TracerViewCell.swift */,
 				D5F717312BC4589C00B1B99E /* HeaderViewController.swift */,
+				D5F95C582BFC77FF00241BB2 /* EditingTrackerViewController.swift */,
 			);
 			path = TracersView;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				D50DECA12BDE49A600FBBB17 /* TrackerRecordStore.swift in Sources */,
 				D5B7FE002BC2E2A2006A943E /* Extention TracersViewController.swift in Sources */,
 				D59B5EC22BBE8A8B00FE4D67 /* SceneDelegate.swift in Sources */,
+				D5F95C592BFC77FF00241BB2 /* EditingTrackerViewController.swift in Sources */,
 				D51359C12BEDFB1700388452 /* CreateCategoryViewController.swift in Sources */,
 				D5F717412BC6E9CA00B1B99E /* TimetableViewController.swift in Sources */,
 				D5B7FDFC2BC188EF006A943E /* TrackerCategory.swift in Sources */,

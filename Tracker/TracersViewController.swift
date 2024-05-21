@@ -7,15 +7,13 @@
 
 import UIKit
 
-final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
+final class TrackersViewController: UIViewController {
     
     // MARK: - Private Properties
     
     private let plugImageView = UIImageView()
     private let plugLable = UILabel()
     private var curentDayOfWeak: Timetable = .none
-    private let trackerCategoryStore = TrackerCategoryStore.shared
-    private let trackerStore = TrackerStore.shared
     
     // MARK: - Public Properties
     
@@ -28,6 +26,9 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
     var curentCategories = [TrackerCategory]()
     var completedTrackers: [TrackerRecord] = []
     var currentDate: Date = Date()
+    let trackerRecordStore = TrackerRecordStore.shared
+    let trackerStore = TrackerStore.shared
+    let trackerCategoryStore = TrackerCategoryStore.shared
     
     // MARK: - Lifecycle
     
@@ -36,6 +37,7 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
         view.backgroundColor = .white
         curentDayOfWeak = calculateDayOfWeak(date: Date())
         categories = returnCategories()
+        completedTrackers = returnCompletedTracers()
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         setupViews()
         trackerStore.delegate = self
@@ -90,6 +92,7 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
     private func setupTrecersCollectionView() {
         self.trackersCollectionView.dataSource = self
         self.trackersCollectionView.delegate = self
+        self.trackersCollectionView.allowsMultipleSelection = false
         trackersCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         trackersCollectionView.register(TracerViewCell.self, forCellWithReuseIdentifier: "cell")
         trackersCollectionView.register(HeaderViewController.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
@@ -153,13 +156,13 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
             var trackers: [Tracker] = []
             if let heading = trackerCategoryCoreData.heading {
                 for trackerCoreData in trackersCoreData {
-                        if trackerCoreData.category == trackerCategoryCoreData {
-                            if
-                                let id = trackerCoreData.id,
-                                let name = trackerCoreData.name,
-                                let color = trackerCoreData.color,
-                                let emogi = trackerCoreData.emoji,
-                                let timetable = trackerCoreData.timetable {
+                    if trackerCoreData.category == trackerCategoryCoreData {
+                        if
+                            let id = trackerCoreData.id,
+                            let name = trackerCoreData.name,
+                            let color = trackerCoreData.color,
+                            let emogi = trackerCoreData.emoji,
+                            let timetable = trackerCoreData.timetable {
                             trackers.append(Tracker(
                                 id: id,
                                 name: name,
@@ -177,23 +180,58 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
         return result
     }
     
+    func returnCompletedTracers() -> [TrackerRecord] {
+        guard let trackersRecordCoreData = trackerRecordStore.fetchTrackerRecord() else { return [] }
+        var result: [TrackerRecord] = []
+        for trackerRecordCoreData in trackersRecordCoreData {
+            if let trackerId = trackerRecordCoreData.id, let trackerRecordDate = trackerRecordCoreData.date {
+                result.append(TrackerRecord(id: trackerId, date: trackerRecordDate))
+            }
+        }
+        return result
+    }
+    
+    // Функция при новой сессии не выдаёт нерегулярные события
     func calculateArrayOfWeak(weak: Timetable, categories: [TrackerCategory]) -> [TrackerCategory] {
         var resultArray = [TrackerCategory]()
+        var fixResultArray = [TrackerCategory]()
         for category in categories {
             var resultTracersInCategory = [Tracker]()
             for tracer in category.tracers {
                 for i in tracer.timetable {
-                    if i == weak || i == .none {
+                    if i == weak {
                         resultTracersInCategory.append(tracer)
+                    }
+                    if i == .none {
+                        var isRecord = false
+                        for completTracker in completedTrackers {
+                            if completTracker.id == tracer.id {
+                                isRecord = true
+                            }
+                        }
+                        if isRecord {
+                            for completTracker in completedTrackers {
+                                if completTracker.id == tracer.id && completTracker.date == currentDate {
+                                    resultTracersInCategory.append(tracer)
+                                }
+                            }
+                        } else {
+                            resultTracersInCategory.append(tracer)
+                        }
                     }
                 }
             }
             if !resultTracersInCategory.isEmpty {
-                let resultOfCategory = TrackerCategory(heading: category.heading, tracers: resultTracersInCategory)
-                resultArray.append(resultOfCategory)
+                if category.heading == "Закрепленные" {
+                    let resultOfCategory = TrackerCategory(heading: category.heading, tracers: resultTracersInCategory)
+                    fixResultArray.append(resultOfCategory)
+                } else {
+                    let resultOfCategory = TrackerCategory(heading: category.heading, tracers: resultTracersInCategory)
+                    resultArray.append(resultOfCategory)
+                }
             }
         }
-        return resultArray
+        return fixResultArray + resultArray
     }
     
     func calculateCountOfDayOnDate(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Int {
@@ -223,41 +261,8 @@ final class TrackersViewController: UIViewController, TrackerViewCellDelegate {
         trackersCollectionView.reloadData()
     }
     
-    // MARK: - TrackerViewCellDelegate
-    
-    func writeCompletedTracker(tracker: Tracker) {
-        let tracerRecord = TrackerRecord(id: tracker.id, date: currentDate)
-        let oldCompletedTrackers = completedTrackers
-        let newCompletedTrackers: [TrackerRecord] = [tracerRecord]
-        completedTrackers = oldCompletedTrackers + newCompletedTrackers
-    }
-    
-    func deleteCompletedTracer(tracker: Tracker) {
-        let tracerRecord = TrackerRecord(id: tracker.id, date: currentDate)
-        let oldCompletedTrackers = completedTrackers
-        var newCompletedTrackers: [TrackerRecord] = [tracerRecord]
-        for i in oldCompletedTrackers {
-            if i.id != tracker.id {
-                newCompletedTrackers.append(i)
-            }
-            if i.id == tracker.id && i.date != tracerRecord.date {
-                newCompletedTrackers.append(i)
-            }
-        }
-        completedTrackers = newCompletedTrackers
-    }
-    
-    func deleteTracerFromCategories(tracker: Tracker) {
-        var newCategories: [TrackerCategory] = []
-        for category in categories {
-            var resultTrackers: [Tracker] = []
-            for i in category.tracers {
-                if tracker.id != i.id {
-                    resultTrackers.append(i)
-                }
-            }
-            newCategories.append(TrackerCategory(heading: category.heading, tracers: resultTrackers))
-        }
+    func isTrackerOrNot(tracker: Tracker) -> Bool {
+        if tracker.timetable.first == Timetable.none { return false } else { return true }
     }
     
     // MARK: - Private Actions

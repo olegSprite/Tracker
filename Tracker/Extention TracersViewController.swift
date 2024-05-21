@@ -28,6 +28,11 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.daysCount = calculateCountOfDayOnDate(tracer: tracer, completedTrackers: completedTrackers, date: currentDate)
         cell.tracerChengeToday = completeTracerOnDateOrNot(tracer: tracer, completedTrackers: completedTrackers, date: currentDate)
         cell.currentTracer(tracer: tracer)
+        var fixed = false
+        if trackerStore.fetchTracker(tracker: tracer)?[0].oldCategory != nil {
+            fixed = true
+        }
+        cell.fixed = fixed
         cell.setupViews(tracker: tracer)
         cell.delegate = self
         return cell
@@ -43,6 +48,7 @@ extension TrackersViewController: UICollectionViewDataSource {
 // MARK: - CollectionViewDelegateFlowLayout
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width / 2, height: 148)
     }
@@ -60,10 +66,79 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
                                                   verticalFittingPriority: .fittingSizeLevel)
     }
 }
+// MARK: - CollectionViewDelegate
+
+extension TrackersViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        guard indexPaths.count > 0 else {
+                    return nil
+                }
+        let indexPath = indexPaths[0]
+        let tracer = curentCategories[indexPath.section].tracers[indexPath.row]
+        guard let categoryCoreData = (trackerStore.fetchTracker(tracker: tracer)?[0].category) else { return nil }
+        var fixed = false
+        if trackerStore.fetchTracker(tracker: tracer)?[0].oldCategory != nil {
+            fixed = true
+        }
+        let daysCount = calculateCountOfDayOnDate(tracer: tracer, completedTrackers: completedTrackers, date: currentDate)
+        return UIContextMenuConfiguration(actionProvider:  { actions in
+                return UIMenu(children: [
+                    UIAction(title: fixed ? "Открепить" : "Закрепить") { [weak self] _ in
+                        if fixed {
+                            self?.trackerStore.unfixedTracker(tracker: tracer)
+                            self?.trackersCollectionView.reloadData()
+                        } else {
+                            if self?.trackerCategoryStore.fetchTrackerCategoryCoreData(heading: "Закрепленные") == nil {
+                                guard let category = self?.trackerCategoryStore.createTracerCategory(heading: "Закрепленные") else { return }
+                                self?.trackerStore.fixedTracker(tracker: tracer, category: category)
+                                self?.trackersCollectionView.reloadData()
+                            } else {
+                                guard let category = self?.trackerCategoryStore.fetchTrackerCategoryCoreData(heading: "Закрепленные") else { return }
+                                self?.trackerStore.fixedTracker(tracker: tracer, category: category)
+                                self?.trackersCollectionView.reloadData()
+                            }
+                        }
+                    },
+                    UIAction(title: "Редактировать") { [weak self] _ in
+                        let vc = EditingTrackerViewController(tracker: tracer,
+                                                              isTracker: self?.isTrackerOrNot(tracker: tracer) ?? false,
+                                                              categoryCoreData: categoryCoreData,
+                                                              timetable: Set(tracer.timetable),
+                                                              daysCount: daysCount)
+                        let navVC = UINavigationController(rootViewController: vc)
+                        self?.present(navVC, animated: true)
+                    },
+                    UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                        self?.trackerStore.deleteTracker(tracker: tracer)
+                        self?.trackersCollectionView.reloadData()
+                    }
+            ])
+        })
+    }
+    
+}
+// MARK: - TrackerStoreDelegate
 
 extension TrackersViewController: TrackerStoreDelegate {
+    
     func updateCollection() {
         reloadCollectionAfterCreating()
+    }
+}
+
+// MARK: - TrackerViewCellDelegate
+
+extension TrackersViewController: TrackerViewCellDelegate {
+    
+    func writeCompletedTracker(tracker: Tracker, date: Date) {
+        trackerRecordStore.createTrackerRecord(tracker: tracker, date: date)
+        completedTrackers = returnCompletedTracers()
+    }
+    
+    func deleteCompletedTracer(tracker: Tracker, date: Date) {
+        trackerRecordStore.deleteTrackerRecord(tracker: tracker, date: date)
+        completedTrackers = returnCompletedTracers()
     }
 }
 

@@ -40,6 +40,7 @@ final class TrackerStore: NSObject {
         return fetchedResultsController
     }()
     weak var delegate: TrackerStoreDelegate?
+    private let trackerCategoryStore = TrackerCategoryStore.shared
     
     // MARK: - Create
     
@@ -61,6 +62,44 @@ final class TrackerStore: NSObject {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         guard let trackersCoreData = try? context.fetch(request) else { return [] }
         return trackersCoreData
+    }
+    
+    func fetchTracker(tracker: Tracker) -> [TrackerCoreData]? {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", argumentArray: [tracker.id])
+        request.fetchLimit = 1
+        do {
+            let result = try context.fetch(request)
+            return result
+        } catch {
+            print("Ошибка при выполнении запроса: \(error)")
+            return nil
+        }
+    }
+    
+    // MARK: - Update
+    
+    func fixedTracker(tracker: Tracker, category: TrackerCategoryCoreData) {
+        let trackerCoreData = fetchTracker(tracker: tracker)?[0]
+        trackerCoreData?.oldCategory = trackerCoreData?.category?.heading
+        trackerCoreData?.category = category
+        persistentContainerCreator.saveContext()
+    }
+    
+    func unfixedTracker(tracker: Tracker) {
+        let trackerCoreData = fetchTracker(tracker: tracker)?[0]
+        guard let oldCategory = trackerCoreData?.oldCategory else { return }
+        trackerCoreData?.category = trackerCategoryStore.fetchTrackerCategoryCoreData(heading: oldCategory)
+        trackerCoreData?.oldCategory = nil
+        persistentContainerCreator.saveContext()
+    }
+    
+    // MARK: - Delete
+    
+    func deleteTracker(tracker: Tracker) {
+        guard let tracker = fetchTracker(tracker: tracker) else { return }
+        context.delete(tracker[0])
+        persistentContainerCreator.saveContext()
     }
 }
 

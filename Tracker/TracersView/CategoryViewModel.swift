@@ -23,7 +23,13 @@ final class CategoryViewModel {
     // MARK: - Public Methods
     
     func fetchTrackerCategory() {
-        self.categoryes?(trackerCategoryStore.trackersCategoryCoreData)
+        var result: [TrackerCategoryCoreData] = []
+        for categoryCoreData in trackerCategoryStore.trackersCategoryCoreData {
+            if categoryCoreData.heading != "Закрепленные" {
+                result.append(categoryCoreData)
+            }
+        }
+        self.categoryes?(result)
         self.trackerCategoryStore.delegate = self
     }
     

@@ -9,9 +9,8 @@ import Foundation
 import UIKit
 
 protocol TrackerViewCellDelegate: AnyObject {
-    func writeCompletedTracker(tracker: Tracker)
-    func deleteCompletedTracer(tracker: Tracker)
-    func deleteTracerFromCategories(tracker: Tracker)
+    func writeCompletedTracker(tracker: Tracker, date: Date)
+    func deleteCompletedTracer(tracker: Tracker, date: Date)
 }
 
 final class TracerViewCell: UICollectionViewCell {
@@ -24,12 +23,14 @@ final class TracerViewCell: UICollectionViewCell {
     private let completeButton = UIButton()
     private var background = UIView()
     private let currentDate = Date()
+    private let fixPin = UIImageView()
     private var currentTracer: Tracker?
     
     // MARK: - Public Properties
     
     var daysCount: Int = 0
     var tracerChengeToday = false
+    var fixed = false
     var selectedDate = Date()
     var tracerViewController: TrackersViewController?
     weak var delegate: TrackerViewCellDelegate?
@@ -42,6 +43,7 @@ final class TracerViewCell: UICollectionViewCell {
         addEmoji(emoji: tracker.emojy)
         addCompleteButton(color: tracker.color)
         addDaysCountLable()
+        addFixPin()
     }
     
     func currentTracer(tracer: Tracker) {
@@ -92,6 +94,21 @@ final class TracerViewCell: UICollectionViewCell {
             emogiImage.widthAnchor.constraint(equalToConstant: 24),
             emogiImage.topAnchor.constraint(equalTo: background.topAnchor, constant: 12)
         ])
+    }
+    
+    private func addFixPin() {
+        if fixed {
+            fixPin.image = UIImage(systemName: "pin.fill")
+            fixPin.tintColor = .white
+            fixPin.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(fixPin)
+            NSLayoutConstraint.activate([
+                fixPin.heightAnchor.constraint(equalToConstant: 12),
+                fixPin.widthAnchor.constraint(equalToConstant: 12),
+                fixPin.topAnchor.constraint(equalTo: background.topAnchor, constant: 18),
+                fixPin.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -10)
+            ])
+        }
     }
     
     private func addDaysCountLable() {
@@ -165,12 +182,12 @@ final class TracerViewCell: UICollectionViewCell {
     
     private func writeCompletedTracker() {
         guard let tracer = currentTracer else { return }
-        delegate?.writeCompletedTracker(tracker: tracer)
+        delegate?.writeCompletedTracker(tracker: tracer, date: selectedDate)
     }
     
     private func deleteCompletedTracer() {
         guard let tracer = currentTracer else { return }
-        delegate?.deleteCompletedTracer(tracker: tracer)
+        delegate?.deleteCompletedTracer(tracker: tracer, date: selectedDate)
     }
     
     // MARK: - Private Actions
@@ -180,8 +197,6 @@ final class TracerViewCell: UICollectionViewCell {
         if tracerChengeToday == false {
             plusDaysCount()
             writeCompletedTracker()
-            guard let tracer = currentTracer else { return }
-            delegate?.deleteTracerFromCategories(tracker: tracer)
         } else {
             minesDaysCount()
             deleteCompletedTracer()

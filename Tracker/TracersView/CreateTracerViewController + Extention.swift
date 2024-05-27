@@ -118,9 +118,9 @@ extension CreateTrackerViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? EmogiAndColorCell else { return UICollectionViewCell()}
         cell.setupCell()
         if indexPath.section == 0 {
-            cell.setupEmogi(emoji[indexPath.row])
+            cell.setupEmogi(emojis[indexPath.row])
         } else {
-            cell.setupColor(color: color[indexPath.row])
+            cell.setupColor(color: colors[indexPath.row])
         }
         return cell
     }

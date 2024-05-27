@@ -37,6 +37,9 @@ final class EditingTrackerViewController: CreateTrackerViewController {
         super.viewDidLoad()
         nameTracerTextField.text = curentTracker?.name
         setupDaysCount(count: daysCount)
+        if let tracker = curentTracker {
+            setupSelectedCell(tracker: tracker)
+        }
     }
     // MARK: - Override Methods
     
@@ -96,6 +99,31 @@ final class EditingTrackerViewController: CreateTrackerViewController {
         default:
             daysCountLable.text = "\(count) дней"
         }
+    }
+    
+    private func setupSelectedCell(tracker: Tracker) {
+        var indexPathEmojy = IndexPath.init(row: 0, section: 0)
+        var indexPathColor = IndexPath.init(row: 0, section: 1)
+        for emoji in emojis {
+            if emoji != tracker.emojy {
+                indexPathEmojy.row += 1
+            } else {
+                break
+            }
+        }
+        for color in colors {
+            if color != tracker.color {
+                indexPathColor.row += 1
+            } else {
+                break
+            }
+        }
+        guard let emojiCell = emogiAndColorCollectionView.cellForItem(at: indexPathEmojy) as? EmogiAndColorCell else { return }
+        guard let colorCell = emogiAndColorCollectionView.cellForItem(at: indexPathColor) as? EmogiAndColorCell else { return }
+        emojiCell.selectEmogiCell()
+        colorCell.selectColorCell()
+        selectedEmogi = tracker.emojy
+        selectedColor = tracker.color
     }
     
     // MARK: - Override Action

@@ -25,6 +25,7 @@ final class TracerViewCell: UICollectionViewCell {
     private let currentDate = Date()
     private let fixPin = UIImageView()
     private var currentTracer: Tracker?
+    private let analyticsService = AnalyticsService()
     
     // MARK: - Public Properties
     
@@ -201,6 +202,7 @@ final class TracerViewCell: UICollectionViewCell {
             minesDaysCount()
             deleteCompletedTracer()
         }
+        analyticsService.report(event: "click", params: ["screen" : "Main", "item" : "track"])
     }
 }
 

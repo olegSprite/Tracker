@@ -14,6 +14,7 @@ final class TrackersViewController: UIViewController {
     private let plugImageView = UIImageView()
     private let plugLable = UILabel()
     private var curentDayOfWeak: Timetable = .none
+    private let filterButton = UIButton()
     
     // MARK: - Public Properties
     
@@ -29,6 +30,7 @@ final class TrackersViewController: UIViewController {
     let trackerRecordStore = TrackerRecordStore.shared
     let trackerStore = TrackerStore.shared
     let trackerCategoryStore = TrackerCategoryStore.shared
+    let analyticsService = AnalyticsService()
     
     // MARK: - Lifecycle
     
@@ -41,6 +43,12 @@ final class TrackersViewController: UIViewController {
         curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         setupViews()
         trackerStore.delegate = self
+        analyticsService.report(event: "open", params: ["screen" : "Main"])
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+     super.viewWillDisappear(animated)
+        analyticsService.report(event: "close", params: ["screen" : "Main"])
     }
     
     // MARK: - Private Methods
@@ -72,9 +80,11 @@ final class TrackersViewController: UIViewController {
         if curentCategories.isEmpty {
             addPlugImage()
             addPlugLable()
+            filterButton.removeFromSuperview()
         } else {
             addTrecersCollectionView()
             setupTrecersCollectionView()
+            addFilterButton()
         }
     }
     
@@ -96,6 +106,25 @@ final class TrackersViewController: UIViewController {
         trackersCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         trackersCollectionView.register(TracerViewCell.self, forCellWithReuseIdentifier: "cell")
         trackersCollectionView.register(HeaderViewController.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        trackersCollectionView.register(FooterViewController.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "footer")
+    }
+    
+    private func addFilterButton() {
+        filterButton.setTitle("Фильтры", for: .normal)
+        filterButton.addTarget(self, action: #selector(filterButtonTap), for: .touchUpInside)
+        filterButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        filterButton.tintColor = .white
+        filterButton.backgroundColor = UIColor(red: 55/255, green: 114/255, blue: 231/255, alpha: 1)
+        filterButton.layer.masksToBounds = true
+        filterButton.layer.cornerRadius = 16
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(filterButton)
+        NSLayoutConstraint.activate([
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114)
+        ])
     }
     
     private func addPlugImage() {
@@ -280,6 +309,14 @@ final class TrackersViewController: UIViewController {
         vc.originalViewController = self
         let navController = UINavigationController(rootViewController: vc)
         self.present(navController, animated: true)
+        analyticsService.report(event: "click", params: ["screen" : "Main", "item" : "add_track"])
+    }
+    
+    @objc private func filterButtonTap() {
+        let vc = FilterViewController()
+        let navBarVC = UINavigationController(rootViewController: vc)
+        self.present(navBarVC, animated: true)
+        analyticsService.report(event: "click", params: ["screen" : "Main", "item" : "filter"])
     }
 }
 

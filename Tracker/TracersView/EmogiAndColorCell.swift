@@ -19,6 +19,7 @@ final class EmogiAndColorCell: UICollectionViewCell {
         let colorView = UIView()
         return colorView
     }()
+    var color: UIColor?
     
     func setupCell() {
         view.layer.masksToBounds = true
@@ -45,6 +46,7 @@ final class EmogiAndColorCell: UICollectionViewCell {
     }
     
     func setupColor(color: UIColor) {
+        self.color = color
         colorView.backgroundColor = color
         colorView.layer.masksToBounds = true
         colorView.layer.cornerRadius = 8

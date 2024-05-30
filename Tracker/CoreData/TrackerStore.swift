@@ -79,6 +79,17 @@ final class TrackerStore: NSObject {
     
     // MARK: - Update
     
+    func updateTracker(oldTracker: Tracker, newTracker: Tracker, category: TrackerCategoryCoreData) {
+        let trackerCoreData = fetchTracker(tracker: oldTracker)?[0]
+        trackerCoreData?.id = newTracker.id
+        trackerCoreData?.name = newTracker.name
+        trackerCoreData?.category = category
+        trackerCoreData?.color = newTracker.color
+        trackerCoreData?.emoji = newTracker.emojy
+        trackerCoreData?.timetable = newTracker.timetable as NSObject
+        persistentContainerCreator.saveContext()
+    }
+    
     func fixedTracker(tracker: Tracker, category: TrackerCategoryCoreData) {
         let trackerCoreData = fetchTracker(tracker: tracker)?[0]
         trackerCoreData?.oldCategory = trackerCoreData?.category?.heading

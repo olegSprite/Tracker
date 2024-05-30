@@ -18,15 +18,16 @@ final class StatisticViewController: UIViewController {
     // MARK: - Public Properties
     
     let statisticTableView = UITableView()
-    let stasisticService = StatisticService()
+    var trackerRecordStore = TrackerRecordStore.shared
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        trackerRecordStore.delegate = self
         view.backgroundColor = .white
         setupNavBar()
-        if StatisticService().completedTracersCount() != 0 {
+        if trackerRecordStore.trackerRecordCoreData.count != 0 {
             addStatisticTableView()
         } else {
             addPlug()
@@ -65,6 +66,7 @@ final class StatisticViewController: UIViewController {
         statisticTableView.delegate = self
         statisticTableView.register(StatisticViewCell.self, forCellReuseIdentifier: "StatisticViewCell")
         statisticTableView.separatorStyle = .none
+        statisticTableView.allowsSelection = false
         statisticTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(statisticTableView)
         NSLayoutConstraint.activate([
@@ -74,10 +76,13 @@ final class StatisticViewController: UIViewController {
             statisticTableView.heightAnchor.constraint(equalToConstant: 408)
         ])
     }
+}
+
+// MARK: - TrackerRecordStoreDelegate
+
+extension StatisticViewController: TrackerRecordStoreDelegate {
     
-    // MARK: - Public Methods
-    
-    func reload() {
+    func updateCollection() {
         statisticTableView.reloadData()
     }
 }

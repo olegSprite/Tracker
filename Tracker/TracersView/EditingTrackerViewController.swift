@@ -16,8 +16,6 @@ final class EditingTrackerViewController: CreateTrackerViewController {
     private var curentTracker: Tracker? = nil
     private var daysCount: Int = 0
     
-    // MARK: - Public Properties
-    
     // MARK: - Lifecycle
     
     init(tracker: Tracker, isTracker: Bool, categoryCoreData: TrackerCategoryCoreData, timetable: Set<Timetable>, daysCount: Int) {
@@ -27,6 +25,8 @@ final class EditingTrackerViewController: CreateTrackerViewController {
         self.categoryCoreData = categoryCoreData
         self.timetable = timetable
         self.daysCount = daysCount
+        self.selectedEmogi = tracker.emojy
+        self.selectedColor = tracker.color
     }
     
     required init?(coder: NSCoder) {
@@ -74,7 +74,11 @@ final class EditingTrackerViewController: CreateTrackerViewController {
     override func addSaveButton() {
         super.addSaveButton()
         saveButton.setTitle("Сохранить", for: .normal)
+        saveButton.isEnabled = true
+        saveButton.backgroundColor = .black
     }
+    
+    override func enabledSaveButtonOrNot() { }
     
     // MARK: - Private Method
     
@@ -129,6 +133,15 @@ final class EditingTrackerViewController: CreateTrackerViewController {
     // MARK: - Override Action
     
     @objc override func tapSaveButton() {
+        guard
+            let old = curentTracker else { return }
+            let new = Tracker(
+                id: curentTracker!.id,
+                name: nameTracerTextField.text!,
+                color: selectedColor!,
+                emojy: selectedEmogi!,
+                timetable: Array(self.timetable))
+        trackerStore.updateTracker(oldTracker: old, newTracker: new, category: categoryCoreData!)
         self.dismiss(animated: true)
     }
 }

@@ -14,7 +14,6 @@ class CreateTrackerViewController: UIViewController, TimetableViewControllerDele
 
     private let exitButton = UIButton()
     private let scrollView = UIScrollView()
-    private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Public Properties
@@ -31,6 +30,7 @@ class CreateTrackerViewController: UIViewController, TimetableViewControllerDele
     var isTracer = false
     var habitOrEventViewController: HabitOrEventViewController?
     var timetable = Set<Timetable>()
+    let trackerStore = TrackerStore.shared
     var categoryCoreData: TrackerCategoryCoreData?
     var selectedEmogi: String?
     var selectedEmogiCell: EmogiAndColorCell?

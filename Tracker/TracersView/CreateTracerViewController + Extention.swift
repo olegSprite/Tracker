@@ -122,6 +122,23 @@ extension CreateTrackerViewController: UICollectionViewDataSource {
         } else {
             cell.setupColor(color: colors[indexPath.row])
         }
+        if indexPath.section == 0 {
+            if selectedEmogi != nil {
+                if selectedEmogi == cell.emogi.text {
+                    cell.selectEmogiCell()
+                    self.selectedEmogiCell = cell
+                }
+            }
+        } else {
+            if selectedColor != nil {
+                if let color1 = selectedColor, let color2 = cell.color {
+                    if color1.isEqualTo(color2) {
+                        cell.selectColorCell()
+                        self.selectedColorCell = cell
+                    }
+                }
+            }
+        }
         return cell
     }
     

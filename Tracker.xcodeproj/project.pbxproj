@@ -23,10 +23,10 @@
 		D5135A112BF1048C00388452 /* PageViewController + Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5135A102BF1048C00388452 /* PageViewController + Extention.swift */; };
 		D51E050E2C0600F600339F7A /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = D51E050D2C0600F600339F7A /* SnapshotTesting */; };
 		D5222EC02C0772750039B94E /* StatisticViewController + extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5222EBF2C0772750039B94E /* StatisticViewController + extention.swift */; };
-		D5222EC22C0772F20039B94E /* StatisticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5222EC12C0772F20039B94E /* StatisticService.swift */; };
 		D5222EC42C0840570039B94E /* StatisticViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5222EC32C0840570039B94E /* StatisticViewCell.swift */; };
 		D5222EC82C084C8C0039B94E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5222EC62C084C8C0039B94E /* Localizable.strings */; };
 		D531CE392C04F6650088BD9E /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D531CE382C04F6650088BD9E /* AnalyticsService.swift */; };
+		D53E030A2C08B2AF00B583DC /* UIColor + extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53E03092C08B2AF00B583DC /* UIColor + extention.swift */; };
 		D5493EDD2BF34C2C0032ED80 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5493EDC2BF34C2C0032ED80 /* CategoryViewModel.swift */; };
 		D589EBB42BCFB8B8009E7469 /* EmogiAndColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */; };
 		D59B5EC02BBE8A8B00FE4D67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */; };
@@ -88,11 +88,11 @@
 		D5135A0C2BF0EA6900388452 /* OnboardingScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingScreenViewController.swift; sourceTree = "<group>"; };
 		D5135A102BF1048C00388452 /* PageViewController + Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageViewController + Extention.swift"; sourceTree = "<group>"; };
 		D5222EBF2C0772750039B94E /* StatisticViewController + extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatisticViewController + extention.swift"; sourceTree = "<group>"; };
-		D5222EC12C0772F20039B94E /* StatisticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticService.swift; sourceTree = "<group>"; };
 		D5222EC32C0840570039B94E /* StatisticViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewCell.swift; sourceTree = "<group>"; };
 		D5222EC72C084C8C0039B94E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D5222EC92C084F990039B94E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D531CE382C04F6650088BD9E /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		D53E03092C08B2AF00B583DC /* UIColor + extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + extention.swift"; sourceTree = "<group>"; };
 		D5493EDC2BF34C2C0032ED80 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmogiAndColorCell.swift; sourceTree = "<group>"; };
 		D59B5EBC2BBE8A8B00FE4D67 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -218,7 +218,6 @@
 				D59B5EF12BBE9C8600FE4D67 /* StatisticViewController.swift */,
 				D5222EBF2C0772750039B94E /* StatisticViewController + extention.swift */,
 				D5222EC32C0840570039B94E /* StatisticViewCell.swift */,
-				D5222EC12C0772F20039B94E /* StatisticService.swift */,
 			);
 			path = StatisticView;
 			sourceTree = "<group>";
@@ -291,6 +290,7 @@
 		D5A03A6C2BCD226000299B8D /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				D53E03092C08B2AF00B583DC /* UIColor + extention.swift */,
 				D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */,
 				D59B5EC12BBE8A8B00FE4D67 /* SceneDelegate.swift */,
 				D5A03A682BCD174800299B8D /* HideKayboardExtention.swift */,
@@ -525,7 +525,6 @@
 			files = (
 				D5B7FDFA2BC1868A006A943E /* Tracker.swift in Sources */,
 				D5A03A672BCA7E3900299B8D /* TimetableViewController + Extention.swift in Sources */,
-				D5222EC22C0772F20039B94E /* StatisticService.swift in Sources */,
 				D5A03A6E2BCD22BE00299B8D /* CustomTextField.swift in Sources */,
 				D5135A042BEF732C00388452 /* NSPersistentContainer.swift in Sources */,
 				D5135A112BF1048C00388452 /* PageViewController + Extention.swift in Sources */,
@@ -547,6 +546,7 @@
 				D5222EC42C0840570039B94E /* StatisticViewCell.swift in Sources */,
 				D5B7FDFE2BC18939006A943E /* TrackerRecord.swift in Sources */,
 				D50DEC9D2BDE499200FBBB17 /* TrackerStore.swift in Sources */,
+				D53E030A2C08B2AF00B583DC /* UIColor + extention.swift in Sources */,
 				D59B5EF02BBE9AF700FE4D67 /* TabBarViewController.swift in Sources */,
 				D531CE392C04F6650088BD9E /* AnalyticsService.swift in Sources */,
 				D59B5EC42BBE8A8B00FE4D67 /* TracersViewController.swift in Sources */,

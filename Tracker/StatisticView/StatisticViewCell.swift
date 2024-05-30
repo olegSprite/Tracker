@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class StatisticViewCell: UITableViewCell {
+    
     // MARK: - Private Properties
     
     private let numberLable = UILabel()
@@ -16,8 +17,6 @@ class StatisticViewCell: UITableViewCell {
     private let gradientLayer = CAGradientLayer()
     private let shapeLayer = CAShapeLayer()
     
-    // MARK: - Public Properties
-    // MARK: - Lifecycle
     // MARK: - Private Methods
     
     private func setupGradientBorder() {
@@ -69,7 +68,4 @@ class StatisticViewCell: UITableViewCell {
         numberLable.text = String(count)
         textLable.text = text
     }
-    
-    // MARK: - Private Actions
-    // MARK: - Public Actions
 }

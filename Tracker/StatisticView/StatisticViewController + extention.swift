@@ -29,7 +29,7 @@ extension StatisticViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "StatisticViewCell", for: indexPath) as? StatisticViewCell else {
             return UITableViewCell()
         }
-        let count = stasisticService.completedTracersCount()
+        let count = trackerRecordStore.trackerRecordCoreData.count
         cell.setupView(count: count, text: "Трекеров завершено")
         return cell
     }

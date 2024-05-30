@@ -50,9 +50,4 @@ final class FilterViewController: UIViewController {
             filtersTableView.heightAnchor.constraint(equalToConstant: 299)
         ])
     }
-    
-    // MARK: - Public Methods
-    // MARK: - Private Actions
-    // MARK: - Public Actions
-    
 }

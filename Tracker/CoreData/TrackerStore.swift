@@ -15,13 +15,13 @@ protocol TrackerStoreDelegate: AnyObject {
 final class TrackerStore: NSObject {
     
     static let shared = TrackerStore()
-    private override init() {}
+    private override init() { }
     private var persistentContainerCreator = PersistentContainerCreator.shared
     private var context: NSManagedObjectContext {
         persistentContainerCreator.persistentContainer.viewContext
     }
     var trackersCoreData: [TrackerCoreData] {
-        guard let objects = self.fetchedResultsController.fetchedObjects else { return []}
+        guard let objects = self.fetchedResultsController.fetchedObjects else { return [] }
         return objects
     }
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {

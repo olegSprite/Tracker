@@ -133,7 +133,7 @@ final class TracerViewCell: UICollectionViewCell {
         } else {
             tracerCompleteToday()
         }
-        completeButton.tintColor = .white
+        completeButton.tintColor = UIColor(named: "YPBackground")
         completeButton.addTarget(self, action: #selector(didTapCompleteButton), for: .touchUpInside)
         addSubview(completeButton)
         NSLayoutConstraint.activate([
@@ -145,13 +145,13 @@ final class TracerViewCell: UICollectionViewCell {
     }
     
     private func setupDaysCount(newCount: Int) {
+        let dayText = NSLocalizedString("day", comment: "день")
+        let daysText = NSLocalizedString("days", comment: "дней")
         switch newCount{
         case 1:
-            daysCountLable.text = "\(newCount) день"
-        case 2...4:
-            daysCountLable.text = "\(newCount) дня"
+            daysCountLable.text = "\(newCount) \(dayText)"
         default:
-            daysCountLable.text = "\(newCount) дней"
+            daysCountLable.text = "\(newCount) \(daysText)"
         }
     }
     

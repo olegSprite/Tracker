@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Олег Спиридонов on 30.05.2024.
+  
+*/
+
+"trackers.title" = "Трекеры";
+"filters" = "Фильтры";
+"trackers.tab" = "Трекеры";
+"statistic.tab" = "Статистика";
+"day" = "день";
+"days" = "дней";

@@ -16,16 +16,29 @@ final class StatisticViewController: UIViewController {
     private let plugLable = UILabel()
     
     // MARK: - Public Properties
+    
+    let statisticTableView = UITableView()
+    let stasisticService = StatisticService()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavBar()
-        addPlug()
+        if StatisticService().completedTracersCount() != 0 {
+            addStatisticTableView()
+        } else {
+            addPlug()
+        }
     }
     
     // MARK: - Private Methods
+    
+    private func setupNavBar() {
+        title = "Статистика"
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
     
     private func addPlug() {
         plugImage.image = UIImage(named: "cryEmoji")
@@ -47,12 +60,24 @@ final class StatisticViewController: UIViewController {
         ])
     }
     
-    private func setupNavBar() {
-        title = "Статистика"
-        navigationController?.navigationBar.prefersLargeTitles = true
+    private func addStatisticTableView() {
+        statisticTableView.dataSource = self
+        statisticTableView.delegate = self
+        statisticTableView.register(StatisticViewCell.self, forCellReuseIdentifier: "StatisticViewCell")
+        statisticTableView.separatorStyle = .none
+        statisticTableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(statisticTableView)
+        NSLayoutConstraint.activate([
+            statisticTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            statisticTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            statisticTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            statisticTableView.heightAnchor.constraint(equalToConstant: 408)
+        ])
     }
     
     // MARK: - Public Methods
-    // MARK: - Private Actions
-    // MARK: - Public Actions
+    
+    func reload() {
+        statisticTableView.reloadData()
+    }
 }

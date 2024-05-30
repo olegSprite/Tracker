@@ -15,6 +15,7 @@ final class TrackersViewController: UIViewController {
     private let plugLable = UILabel()
     private var curentDayOfWeak: Timetable = .none
     private let filterButton = UIButton()
+    private let datePicker = UIDatePicker()
     
     // MARK: - Public Properties
     
@@ -24,23 +25,22 @@ final class TrackersViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
     }()
-    var curentCategories = [TrackerCategory]()
     var completedTrackers: [TrackerRecord] = []
     var currentDate: Date = Date()
     let trackerRecordStore = TrackerRecordStore.shared
     let trackerStore = TrackerStore.shared
     let trackerCategoryStore = TrackerCategoryStore.shared
     let analyticsService = AnalyticsService()
+    var statisticViewController: StatisticViewController?
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "YPBackground")
         curentDayOfWeak = calculateDayOfWeak(date: Date())
-        categories = returnCategories()
+        categories = returnCategories(filter: UserDefaults.standard.integer(forKey: "filter"))
         completedTrackers = returnCompletedTracers()
-        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
         setupViews()
         trackerStore.delegate = self
         analyticsService.report(event: "open", params: ["screen" : "Main"])
@@ -59,25 +59,23 @@ final class TrackersViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        title = "Трекеры"
+        let titleText = NSLocalizedString("trackers.title", comment: "Трекеры")
+        title = titleText
         navigationController?.navigationBar.prefersLargeTitles = true
         let leftButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(didTapPlusButtonOnNavBar))
-        leftButton.tintColor = .black
+        leftButton.tintColor = UIColor(named: "YPTextColor")
         self.navigationItem.leftBarButtonItem = leftButton
-        
-        let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-        
         let searchField = UISearchController(searchResultsController: nil)
         searchField.automaticallyShowsCancelButton = true
         self.navigationItem.searchController = searchField
     }
     
     private func showPlugOrTracers() {
-        if curentCategories.isEmpty {
+        if categories.isEmpty {
             addPlugImage()
             addPlugLable()
             filterButton.removeFromSuperview()
@@ -89,6 +87,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addTrecersCollectionView() {
+        trackersCollectionView.backgroundColor = UIColor(named: "YPBackground")
         trackersCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(trackersCollectionView)
         NSLayoutConstraint.activate([
@@ -110,10 +109,15 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addFilterButton() {
-        filterButton.setTitle("Фильтры", for: .normal)
+        let filterText = NSLocalizedString("filters", comment: "Фильтры")
+        filterButton.setTitle(filterText, for: .normal)
         filterButton.addTarget(self, action: #selector(filterButtonTap), for: .touchUpInside)
         filterButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        filterButton.tintColor = .white
+        if UserDefaults.standard.integer(forKey: "filter") == 0 {
+            filterButton.tintColor = .white
+        } else {
+            filterButton.tintColor = .red
+        }
         filterButton.backgroundColor = UIColor(red: 55/255, green: 114/255, blue: 231/255, alpha: 1)
         filterButton.layer.masksToBounds = true
         filterButton.layer.cornerRadius = 16
@@ -140,7 +144,11 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addPlugLable() {
-        plugLable.text = "Что будем отслеживать?"
+        if trackerStore.trackersCoreData.isEmpty {
+            plugLable.text = "Что будем отслеживать?"
+        } else {
+            plugLable.text = "Ничего не найдено"
+        }
         plugLable.font = UIFont.systemFont(ofSize: 12)
         plugLable.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(plugLable)
@@ -177,10 +185,12 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Public Methods
     
-    func returnCategories() -> [TrackerCategory] {
+    func returnCategories(filter: Int) -> [TrackerCategory] {
         let trackersCategoryCoreData = trackerCategoryStore.trackersCategoryCoreData
         let trackersCoreData = trackerStore.trackersCoreData
         var result: [TrackerCategory] = []
+        let currentDate = datePicker.date
+        let weak = calculateDayOfWeak(date: currentDate)
         for trackerCategoryCoreData in trackersCategoryCoreData {
             var trackers: [Tracker] = []
             if let heading = trackerCategoryCoreData.heading {
@@ -192,18 +202,63 @@ final class TrackersViewController: UIViewController {
                             let color = trackerCoreData.color,
                             let emogi = trackerCoreData.emoji,
                             let timetable = trackerCoreData.timetable {
-                            trackers.append(Tracker(
+                            
+                            let tracker = Tracker(
                                 id: id,
                                 name: name,
                                 color: color as! UIColor,
                                 emojy: emogi,
-                                timetable: timetable as! [Timetable]))
+                                timetable: timetable as! [Timetable]
+                            )
+                            
+                            let isCompletedToday = completedTrackers.contains { $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: currentDate) }
+                            let isNotCompletedToday = !isCompletedToday
+                            
+                            switch filter {
+                            case 0:
+                                for trackerWeak in tracker.timetable {
+                                    if trackerWeak == weak {
+                                        trackers.append(tracker)
+                                    }
+                                }
+                            case 1:
+                                datePicker.date = Date()
+                                for trackerWeak in tracker.timetable {
+                                    if trackerWeak == weak {
+                                        trackers.append(tracker)
+                                    }
+                                }
+                            case 2:
+                                if isCompletedToday {
+                                    for trackerWeak in tracker.timetable {
+                                        if trackerWeak == weak {
+                                            trackers.append(tracker)
+                                        }
+                                    }
+                                }
+                            case 3:
+                                if isNotCompletedToday {
+                                    for trackerWeak in tracker.timetable {
+                                        if trackerWeak == weak {
+                                            trackers.append(tracker)
+                                        }
+                                    }
+                                }
+                            default:
+                                for trackerWeak in tracker.timetable {
+                                    if trackerWeak == weak {
+                                        trackers.append(tracker)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-                result.append(TrackerCategory(
-                    heading: heading,
-                    tracers: trackers))
+                if !trackers.isEmpty {
+                    result.append(TrackerCategory(
+                        heading: heading,
+                        tracers: trackers))
+                }
             }
         }
         return result
@@ -220,49 +275,6 @@ final class TrackersViewController: UIViewController {
         return result
     }
     
-    // Функция при новой сессии не выдаёт нерегулярные события
-    func calculateArrayOfWeak(weak: Timetable, categories: [TrackerCategory]) -> [TrackerCategory] {
-        var resultArray = [TrackerCategory]()
-        var fixResultArray = [TrackerCategory]()
-        for category in categories {
-            var resultTracersInCategory = [Tracker]()
-            for tracer in category.tracers {
-                for i in tracer.timetable {
-                    if i == weak {
-                        resultTracersInCategory.append(tracer)
-                    }
-                    if i == .none {
-                        var isRecord = false
-                        for completTracker in completedTrackers {
-                            if completTracker.id == tracer.id {
-                                isRecord = true
-                            }
-                        }
-                        if isRecord {
-                            for completTracker in completedTrackers {
-                                if completTracker.id == tracer.id && completTracker.date == currentDate {
-                                    resultTracersInCategory.append(tracer)
-                                }
-                            }
-                        } else {
-                            resultTracersInCategory.append(tracer)
-                        }
-                    }
-                }
-            }
-            if !resultTracersInCategory.isEmpty {
-                if category.heading == "Закрепленные" {
-                    let resultOfCategory = TrackerCategory(heading: category.heading, tracers: resultTracersInCategory)
-                    fixResultArray.append(resultOfCategory)
-                } else {
-                    let resultOfCategory = TrackerCategory(heading: category.heading, tracers: resultTracersInCategory)
-                    resultArray.append(resultOfCategory)
-                }
-            }
-        }
-        return fixResultArray + resultArray
-    }
-    
     func calculateCountOfDayOnDate(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Int {
         var result: Int = 0
         for i in completedTrackers {
@@ -276,7 +288,9 @@ final class TrackersViewController: UIViewController {
     func completeTracerOnDateOrNot(tracer: Tracker, completedTrackers: [TrackerRecord], date: Date) -> Bool {
         var result = false
         for i in completedTrackers {
-            if i.id == tracer.id && i.date == date {
+            let componentsDate1 = Calendar.current.dateComponents([.year, .month, .day], from: i.date)
+            let componentsDate2 = Calendar.current.dateComponents([.year, .month, .day], from: date)
+            if i.id == tracer.id && componentsDate1 == componentsDate2 {
                 result = true
             }
         }
@@ -284,8 +298,13 @@ final class TrackersViewController: UIViewController {
     }
     
     func reloadCollectionAfterCreating() {
-        categories = returnCategories()
-        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
+        categories = returnCategories(filter: UserDefaults.standard.integer(forKey: "filter"))
+        showPlugOrTracers()
+        trackersCollectionView.reloadData()
+    }
+    
+    func reloadCollection() {
+        categories = returnCategories(filter: UserDefaults.standard.integer(forKey: "filter"))
         showPlugOrTracers()
         trackersCollectionView.reloadData()
     }
@@ -299,7 +318,7 @@ final class TrackersViewController: UIViewController {
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         curentDayOfWeak = calculateDayOfWeak(date: sender.date)
-        curentCategories = calculateArrayOfWeak(weak: curentDayOfWeak, categories: categories)
+        categories = returnCategories(filter: UserDefaults.standard.integer(forKey: "filter"))
         showPlugOrTracers()
         trackersCollectionView.reloadData()
     }
@@ -314,6 +333,7 @@ final class TrackersViewController: UIViewController {
     
     @objc private func filterButtonTap() {
         let vc = FilterViewController()
+        vc.vc = self
         let navBarVC = UINavigationController(rootViewController: vc)
         self.present(navBarVC, animated: true)
         analyticsService.report(event: "click", params: ["screen" : "Main", "item" : "filter"])

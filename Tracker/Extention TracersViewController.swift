@@ -13,16 +13,16 @@ import UIKit
 extension TrackersViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        curentCategories.count
+        categories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return curentCategories[section].tracers.count
+        return categories[section].tracers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TracerViewCell else { return UICollectionViewCell() }
-        let tracer = curentCategories[indexPath.section].tracers[indexPath.row]
+        let tracer = categories[indexPath.section].tracers[indexPath.row]
         cell.selectedDate = currentDate
         cell.tracerViewController = self
         cell.daysCount = calculateCountOfDayOnDate(tracer: tracer, completedTrackers: completedTrackers, date: currentDate)
@@ -41,7 +41,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? HeaderViewController else { return UICollectionReusableView() }
-            view.titleLabel.text = curentCategories[indexPath.section].heading
+            view.titleLabel.text = categories[indexPath.section].heading
             return view
         } else if kind == UICollectionView.elementKindSectionFooter && indexPath.section == collectionView.numberOfSections - 1 {
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath) as! FooterViewController
@@ -88,7 +88,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             return nil
         }
         let indexPath = indexPaths[0]
-        let tracer = curentCategories[indexPath.section].tracers[indexPath.row]
+        let tracer = categories[indexPath.section].tracers[indexPath.row]
         guard let categoryCoreData = (trackerStore.fetchTracker(tracker: tracer)?[0].category) else { return nil }
         var fixed = false
         if trackerStore.fetchTracker(tracker: tracer)?[0].oldCategory != nil {

@@ -13,9 +13,12 @@ final class FilterViewController: UIViewController {
     // MARK: - Private Properties
     
     private let filtersTableView = UITableView()
+    
     // MARK: - Public Properties
     
     let filtersName = ["Все трекеры", "Трекеры на сегодня", "Завершенные", "Не завершенные"]
+    var vc: TrackersViewController? = nil
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {

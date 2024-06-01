@@ -343,7 +343,7 @@ final class TrackersViewController: UIViewController {
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         curentDayOfWeak = calculateDayOfWeak(date: sender.date)
-        categories = returnCategories(filter: UserDefaults.standard.integer(forKey: "filter"))
+        categories = returnCategories(filter: 0)
         showPlugOrTracers()
         trackersCollectionView.reloadData()
     }

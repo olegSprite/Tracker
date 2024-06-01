@@ -213,12 +213,21 @@ final class TrackersViewController: UIViewController {
                             
                             let isCompletedToday = completedTrackers.contains { $0.id == id && Calendar.current.isDate($0.date, inSameDayAs: currentDate) }
                             let isNotCompletedToday = !isCompletedToday
+                            let isCompletedAnyDay = completedTrackers.contains { $0.id == id }
                             
                             switch filter {
                             case 0:
                                 for trackerWeak in tracker.timetable {
                                     if trackerWeak == weak {
                                         trackers.append(tracker)
+                                    }
+                                    if trackerWeak == .none {
+                                        if isCompletedAnyDay && isCompletedToday {
+                                            trackers.append(tracker)
+                                        }
+                                        if !isCompletedAnyDay {
+                                            trackers.append(tracker)
+                                        }
                                     }
                                 }
                             case 1:
@@ -227,11 +236,19 @@ final class TrackersViewController: UIViewController {
                                     if trackerWeak == weak {
                                         trackers.append(tracker)
                                     }
+                                    if trackerWeak == .none {
+                                        if isCompletedAnyDay && isCompletedToday {
+                                            trackers.append(tracker)
+                                        }
+                                        if !isCompletedAnyDay {
+                                            trackers.append(tracker)
+                                        }
+                                    }
                                 }
                             case 2:
                                 if isCompletedToday {
                                     for trackerWeak in tracker.timetable {
-                                        if trackerWeak == weak {
+                                        if trackerWeak == weak || trackerWeak == .none {
                                             trackers.append(tracker)
                                         }
                                     }
@@ -242,11 +259,19 @@ final class TrackersViewController: UIViewController {
                                         if trackerWeak == weak {
                                             trackers.append(tracker)
                                         }
+                                        if trackerWeak == .none {
+                                            if isCompletedAnyDay && isCompletedToday {
+                                                trackers.append(tracker)
+                                            }
+                                            if !isCompletedAnyDay {
+                                                trackers.append(tracker)
+                                            }
+                                        }
                                     }
                                 }
                             default:
                                 for trackerWeak in tracker.timetable {
-                                    if trackerWeak == weak {
+                                    if trackerWeak == weak || trackerWeak == .none {
                                         trackers.append(tracker)
                                     }
                                 }

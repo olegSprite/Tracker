@@ -27,6 +27,7 @@
 		D5222EC82C084C8C0039B94E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5222EC62C084C8C0039B94E /* Localizable.strings */; };
 		D531CE392C04F6650088BD9E /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D531CE382C04F6650088BD9E /* AnalyticsService.swift */; };
 		D53E030A2C08B2AF00B583DC /* UIColor + extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53E03092C08B2AF00B583DC /* UIColor + extention.swift */; };
+		D53E030C2C0ADC3F00B583DC /* TrackerViewCell + extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53E030B2C0ADC3F00B583DC /* TrackerViewCell + extention.swift */; };
 		D5493EDD2BF34C2C0032ED80 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5493EDC2BF34C2C0032ED80 /* CategoryViewModel.swift */; };
 		D589EBB42BCFB8B8009E7469 /* EmogiAndColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */; };
 		D59B5EC02BBE8A8B00FE4D67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B5EBF2BBE8A8B00FE4D67 /* AppDelegate.swift */; };
@@ -93,6 +94,7 @@
 		D5222EC92C084F990039B94E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D531CE382C04F6650088BD9E /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		D53E03092C08B2AF00B583DC /* UIColor + extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + extention.swift"; sourceTree = "<group>"; };
+		D53E030B2C0ADC3F00B583DC /* TrackerViewCell + extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackerViewCell + extention.swift"; sourceTree = "<group>"; };
 		D5493EDC2BF34C2C0032ED80 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		D589EBB32BCFB8B8009E7469 /* EmogiAndColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmogiAndColorCell.swift; sourceTree = "<group>"; };
 		D59B5EBC2BBE8A8B00FE4D67 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -318,6 +320,7 @@
 				D59B5EC32BBE8A8B00FE4D67 /* TracersViewController.swift */,
 				D5B7FDFF2BC2E2A2006A943E /* Extention TracersViewController.swift */,
 				D5B7FE012BC2E4B7006A943E /* TracerViewCell.swift */,
+				D53E030B2C0ADC3F00B583DC /* TrackerViewCell + extention.swift */,
 				D5F717312BC4589C00B1B99E /* HeaderViewController.swift */,
 				D5F95C5F2BFF2AB700241BB2 /* FooterViewController.swift */,
 				D5F95C582BFC77FF00241BB2 /* EditingTrackerViewController.swift */,
@@ -527,6 +530,7 @@
 				D5A03A672BCA7E3900299B8D /* TimetableViewController + Extention.swift in Sources */,
 				D5A03A6E2BCD22BE00299B8D /* CustomTextField.swift in Sources */,
 				D5135A042BEF732C00388452 /* NSPersistentContainer.swift in Sources */,
+				D53E030C2C0ADC3F00B583DC /* TrackerViewCell + extention.swift in Sources */,
 				D5135A112BF1048C00388452 /* PageViewController + Extention.swift in Sources */,
 				D5F717372BC551EC00B1B99E /* CreateTracerViewController.swift in Sources */,
 				D5B7FE022BC2E4B7006A943E /* TracerViewCell.swift in Sources */,

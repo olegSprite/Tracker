@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class StatisticViewCell: UITableViewCell {
+final class StatisticViewCell: UITableViewCell {
     
     // MARK: - Private Properties
     
@@ -20,24 +20,24 @@ class StatisticViewCell: UITableViewCell {
     // MARK: - Private Methods
     
     private func setupGradientBorder() {
-            gradientLayer.colors = [UIColor.red.cgColor, UIColor.green.cgColor, UIColor.blue.cgColor]
-            gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
-            gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-            gradientLayer.frame = bounds
-            shapeLayer.lineWidth = 1
-            shapeLayer.path = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 2), cornerRadius: 16).cgPath
-            shapeLayer.fillColor = UIColor.clear.cgColor
-            shapeLayer.strokeColor = UIColor.black.cgColor
-            
-            gradientLayer.mask = shapeLayer
-            layer.addSublayer(gradientLayer)
-        }
+        gradientLayer.colors = [UIColor.red.cgColor, UIColor.green.cgColor, UIColor.blue.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        gradientLayer.frame = bounds
+        shapeLayer.lineWidth = 1
+        shapeLayer.path = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 2), cornerRadius: 16).cgPath
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.strokeColor = UIColor.black.cgColor
+        
+        gradientLayer.mask = shapeLayer
+        layer.addSublayer(gradientLayer)
+    }
     
     override func layoutSubviews() {
-            super.layoutSubviews()
-            gradientLayer.frame = bounds
-            shapeLayer.path = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 2), cornerRadius: 16).cgPath
-        }
+        super.layoutSubviews()
+        gradientLayer.frame = bounds
+        shapeLayer.path = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 2), cornerRadius: 16).cgPath
+    }
     
     private func addNubberLable() {
         numberLable.font = UIFont.systemFont(ofSize: 34, weight: .bold)

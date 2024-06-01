@@ -73,21 +73,40 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-            if section == collectionView.numberOfSections - 1 {
-                return CGSize(width: collectionView.frame.width, height: 75)
-            }
-            return CGSize.zero
+        if section == collectionView.numberOfSections - 1 {
+            return CGSize(width: collectionView.frame.width, height: 75)
         }
+        return CGSize.zero
+    }
 }
 // MARK: - CollectionViewDelegate
 
-extension TrackersViewController: UICollectionViewDelegate {
+extension TrackersViewController: UICollectionViewDelegate { }
+// MARK: - TrackerStoreDelegate
+
+extension TrackersViewController: TrackerStoreDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-        guard indexPaths.count > 0 else {
-            return nil
-        }
-        let indexPath = indexPaths[0]
+    func updateCollection() {
+        reloadCollectionAfterCreating()
+    }
+}
+
+// MARK: - TrackerViewCellDelegate
+
+extension TrackersViewController: TrackerViewCellDelegate {
+    
+    func writeCompletedTracker(tracker: Tracker, date: Date) {
+        trackerRecordStore.createTrackerRecord(tracker: tracker, date: date)
+        completedTrackers = returnCompletedTracers()
+    }
+    
+    func deleteCompletedTracer(tracker: Tracker, date: Date) {
+        trackerRecordStore.deleteTrackerRecord(tracker: tracker, date: date)
+        completedTrackers = returnCompletedTracers()
+    }
+    
+    func returnContextMenu(cell: TracerViewCell) -> UIContextMenuConfiguration? {
+        guard let indexPath = trackersCollectionView.indexPath(for: cell) else { return nil }
         let tracer = categories[indexPath.section].tracers[indexPath.row]
         guard let categoryCoreData = (trackerStore.fetchTracker(tracker: tracer)?[0].category) else { return nil }
         var fixed = false
@@ -130,30 +149,6 @@ extension TrackersViewController: UICollectionViewDelegate {
                 }
             ])
         })
-    }
-    
-}
-// MARK: - TrackerStoreDelegate
-
-extension TrackersViewController: TrackerStoreDelegate {
-    
-    func updateCollection() {
-        reloadCollectionAfterCreating()
-    }
-}
-
-// MARK: - TrackerViewCellDelegate
-
-extension TrackersViewController: TrackerViewCellDelegate {
-    
-    func writeCompletedTracker(tracker: Tracker, date: Date) {
-        trackerRecordStore.createTrackerRecord(tracker: tracker, date: date)
-        completedTrackers = returnCompletedTracers()
-    }
-    
-    func deleteCompletedTracer(tracker: Tracker, date: Date) {
-        trackerRecordStore.deleteTrackerRecord(tracker: tracker, date: date)
-        completedTrackers = returnCompletedTracers()
     }
 }
 

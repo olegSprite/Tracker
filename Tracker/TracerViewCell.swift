@@ -11,6 +11,7 @@ import UIKit
 protocol TrackerViewCellDelegate: AnyObject {
     func writeCompletedTracker(tracker: Tracker, date: Date)
     func deleteCompletedTracer(tracker: Tracker, date: Date)
+    func returnContextMenu(cell: TracerViewCell) -> UIContextMenuConfiguration?
 }
 
 final class TracerViewCell: UICollectionViewCell {
@@ -45,6 +46,7 @@ final class TracerViewCell: UICollectionViewCell {
         addCompleteButton(color: tracker.color)
         addDaysCountLable()
         addFixPin()
+        setupContextMenu()
     }
     
     func currentTracer(tracer: Tracker) {
@@ -55,11 +57,13 @@ final class TracerViewCell: UICollectionViewCell {
     
     private func createBackground(color: UIColor) {
         background.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(background)
+        contentView.addSubview(background)
         background.backgroundColor = color
         NSLayoutConstraint.activate([
             background.widthAnchor.constraint(equalToConstant: 167),
             background.heightAnchor.constraint(equalToConstant: 90),
+            background.topAnchor.constraint(equalTo: contentView.topAnchor),
+            background.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
         background.layer.cornerRadius = 16
     }
@@ -72,7 +76,7 @@ final class TracerViewCell: UICollectionViewCell {
         nameLable.lineBreakMode = .byWordWrapping
         nameLable.textAlignment = .left
         nameLable.numberOfLines = 2
-        addSubview(nameLable)
+        background.addSubview(nameLable)
         NSLayoutConstraint.activate([
             nameLable.leadingAnchor.constraint(equalTo: background.leadingAnchor, constant: 12),
             nameLable.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -12),
@@ -88,7 +92,7 @@ final class TracerViewCell: UICollectionViewCell {
         emogiImage.backgroundColor = .white.withAlphaComponent(0.3)
         emogiImage.layer.masksToBounds = true
         emogiImage.layer.cornerRadius = 12
-        addSubview(emogiImage)
+        background.addSubview(emogiImage)
         NSLayoutConstraint.activate([
             emogiImage.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
             emogiImage.heightAnchor.constraint(equalToConstant: 24),
@@ -102,7 +106,7 @@ final class TracerViewCell: UICollectionViewCell {
             fixPin.image = UIImage(systemName: "pin.fill")
             fixPin.tintColor = .white
             fixPin.translatesAutoresizingMaskIntoConstraints = false
-            addSubview(fixPin)
+            background.addSubview(fixPin)
             NSLayoutConstraint.activate([
                 fixPin.heightAnchor.constraint(equalToConstant: 12),
                 fixPin.widthAnchor.constraint(equalToConstant: 12),
@@ -116,7 +120,7 @@ final class TracerViewCell: UICollectionViewCell {
         daysCountLable.translatesAutoresizingMaskIntoConstraints = false
         setupDaysCount(newCount: daysCount)
         daysCountLable.font = UIFont.systemFont(ofSize: 12)
-        addSubview(daysCountLable)
+        contentView.addSubview(daysCountLable)
         NSLayoutConstraint.activate([
             daysCountLable.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
             daysCountLable.centerYAnchor.constraint(equalTo: completeButton.centerYAnchor),
@@ -135,7 +139,7 @@ final class TracerViewCell: UICollectionViewCell {
         }
         completeButton.tintColor = UIColor(named: "YPBackground")
         completeButton.addTarget(self, action: #selector(didTapCompleteButton), for: .touchUpInside)
-        addSubview(completeButton)
+        contentView.addSubview(completeButton)
         NSLayoutConstraint.activate([
             completeButton.topAnchor.constraint(equalTo: background.bottomAnchor, constant: 8),
             completeButton.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -12),
@@ -189,6 +193,11 @@ final class TracerViewCell: UICollectionViewCell {
     private func deleteCompletedTracer() {
         guard let tracer = currentTracer else { return }
         delegate?.deleteCompletedTracer(tracker: tracer, date: selectedDate)
+    }
+    
+    private func setupContextMenu() {
+        let interaction = UIContextMenuInteraction(delegate: self)
+        background.addInteraction(interaction)
     }
     
     // MARK: - Private Actions

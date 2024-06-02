@@ -8,6 +8,10 @@
 import Foundation
 import CoreData
 
+protocol TrackerRecordStoreDelegate: AnyObject {
+    func updateCollection()
+}
+
 final class TrackerRecordStore: NSObject {
     
     // MARK: - Private Properties
@@ -20,6 +24,28 @@ final class TrackerRecordStore: NSObject {
     // MARK: - Public Properties
     
     static let shared = TrackerRecordStore()
+    
+    var trackerRecordCoreData: [TrackerRecordCoreData] {
+        guard let objects = self.fetchedResultsController.fetchedObjects else { return [] }
+        return objects
+    }
+    
+    private lazy var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData> = {
+        let fetchRequest = TrackerRecordCoreData.fetchRequest()
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "id", ascending: false)
+        ]
+        let fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        fetchedResultsController.delegate = self
+        try? fetchedResultsController.performFetch()
+        return fetchedResultsController
+    }()
+    weak var delegate: TrackerRecordStoreDelegate?
     
     // MARK: - Create
     
@@ -66,5 +92,14 @@ final class TrackerRecordStore: NSObject {
             print("Ошибка при выполнении запроса: \(error)")
             return nil
         }
+    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<any NSFetchRequestResult>) {
+        delegate?.updateCollection()
     }
 }

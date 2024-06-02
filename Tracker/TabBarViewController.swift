@@ -19,14 +19,16 @@ final class TabBarViewController: UITabBarController {
     }
     
     private func createTabBar() {
+        let trackersText = NSLocalizedString("trackers.tab", comment: "Трекеры")
+        let statisticText = NSLocalizedString("statistic.tab", comment: "Статистика")
         viewControllers = [
             createViewController(
                 viewController: TrackersViewController(),
-                title: "Трекеры",
+                title: trackersText,
                 image: UIImage(systemName: "record.circle.fill")),
             createViewController(
                 viewController: StatisticViewController(),
-                title: "Статистика",
+                title: statisticText,
                 image: UIImage(systemName: "hare.fill")),
         ]
     }

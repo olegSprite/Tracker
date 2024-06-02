@@ -13,13 +13,7 @@ class CreateTrackerViewController: UIViewController, TimetableViewControllerDele
     // MARK: - Private Properties
 
     private let exitButton = UIButton()
-    private var emogiAndColorCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        return collectionView
-    }()
     private let scrollView = UIScrollView()
-    private let trackerStore = TrackerStore.shared
     private let trackerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Public Properties
@@ -28,9 +22,15 @@ class CreateTrackerViewController: UIViewController, TimetableViewControllerDele
     let nameTracerTextField = CustomTextField()
     let buttonsOfCattegoryOrTimetableTableView = UITableView()
     let saveButton = UIButton()
+    var emogiAndColorCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
     var isTracer = false
     var habitOrEventViewController: HabitOrEventViewController?
     var timetable = Set<Timetable>()
+    let trackerStore = TrackerStore.shared
     var categoryCoreData: TrackerCategoryCoreData?
     var selectedEmogi: String?
     var selectedEmogiCell: EmogiAndColorCell?
@@ -38,8 +38,8 @@ class CreateTrackerViewController: UIViewController, TimetableViewControllerDele
     var selectedColorCell: EmogiAndColorCell?
     var textFieldСompleted = false
     var timetableСompleted = false
-    let emoji: [String] = ["🙂", "😻", "🌺", "🐶", "♥️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
-    let color: [UIColor] = [.color1, .color2, .color3, .color4, .color5, .color6, .color7, .color8, .color9, .color10, .color11, .color12, .color13, .color14, .color15, .color16, .color17, .color18]
+    let emojis: [String] = ["🙂", "😻", "🌺", "🐶", "♥️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
+    let colors: [UIColor] = [.color1, .color2, .color3, .color4, .color5, .color6, .color7, .color8, .color9, .color10, .color11, .color12, .color13, .color14, .color15, .color16, .color17, .color18]
     var viewModel: CategoryViewModel?
     
     // MARK: - Lifecycle
